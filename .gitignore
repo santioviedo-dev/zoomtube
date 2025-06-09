@@ -1,0 +1,11 @@
+# Configs y credenciales
+config/.env
+config/client_secret.json
+config/token.pickle
+
+# Archivos temporales y de ejecución
+data/grabaciones/
+logs/
+*.log
+__pycache__/
+*.pyc
