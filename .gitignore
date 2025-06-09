@@ -6,6 +6,7 @@ config/token.pickle
 # Archivos temporales y de ejecución
 data/recordings/
 data/iframes.json
+output/iframes_clean.html
 logs/
 *.log
 __pycache__/
