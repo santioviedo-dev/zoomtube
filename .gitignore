@@ -4,7 +4,8 @@ config/client_secret.json
 config/token.pickle
 
 # Archivos temporales y de ejecución
-data/grabaciones/
+data/recordings/
+data/iframes.json
 logs/
 *.log
 __pycache__/
