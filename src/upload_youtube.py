@@ -18,18 +18,22 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 CONFIG_DIR = os.path.normpath(os.path.join(CURRENT_DIR, "../config"))
 LOGS_DIR = os.path.normpath(os.path.join(CURRENT_DIR, "../logs"))
 DATA_DIR = os.path.normpath(os.path.join(CURRENT_DIR, "../data"))
+OUTPUT_DIR = os.path.normpath(os.path.join(CURRENT_DIR, "../output"))
 
-# Configuración
-CLIENT_SECRETS_FILE = os.path.join(CONFIG_DIR, "client_secret.json")
-TOKEN_FILE = os.path.join(CONFIG_DIR, "token.pickle")
-LOG_FILE = os.path.join(LOGS_DIR, "uploaded.log")
-IFRAME_JSON_FILE = os.path.join(DATA_DIR, "iframes.json")
+# Configuration
 VIDEO_EXTENSIONS = [".mp4", ".mov", ".avi", ".mkv"]
 API_SERVICE_NAME = 'youtube'
 API_VERSION = 'v3'
 SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
 
-# ---------------- Autenticación ----------------
+# File paths
+CLIENT_SECRETS_FILE = os.path.join(CONFIG_DIR, "client_secret.json")
+TOKEN_FILE = os.path.join(CONFIG_DIR, "token.pickle")
+LOG_FILE = os.path.join(LOGS_DIR, "uploaded.log")
+IFRAME_JSON_FILE = os.path.join(DATA_DIR, "iframes.json")
+HTML_FILE = os.path.join(OUTPUT_DIR, "iframes_clean.html")
+
+# ---------------- Autentication ----------------
 def get_authenticated_service():
     creds = None
     if os.path.exists(TOKEN_FILE):
@@ -46,7 +50,7 @@ def get_authenticated_service():
             pickle.dump(creds, token)
     return build(API_SERVICE_NAME, API_VERSION, credentials=creds)
 
-# ---------------- Registro y Log ----------------
+# ---------------- Registration and Log ----------------
 def load_uploaded_log():
     return set(open(LOG_FILE, "r", encoding="utf-8").read().splitlines()) if os.path.exists(LOG_FILE) else set()
 
@@ -56,15 +60,14 @@ def record_uploaded_video(file_path):
 
 # ---------------- Iframe ----------------
 def save_iframe_json(title, iframe):
+        
     data = []
     if os.path.exists(IFRAME_JSON_FILE):
-        try:
-            data = json.load(open(IFRAME_JSON_FILE, "r", encoding="utf-8"))
-        except json.JSONDecodeError:
-            pass
-    data.append({"title": title, "iframe": iframe})
+        os.remove(IFRAME_JSON_FILE)
+    data = {"title": title, "iframe": iframe}
     with open(IFRAME_JSON_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
+        
 
 # ---------------- Subida ----------------
 def upload_video(youtube, file_path, title):
@@ -113,62 +116,9 @@ def upload_all_videos(folder_path):
             except Exception as e:
                 print(f"❌ Error uploading {file_name}: {e}")
 
-# ---------------- HTML ----------------
-def generate_html(json_file="../data/iframes.json", html_file="../output/iframes_clean.html"):
-    if not os.path.exists(json_file):
-        print("⚠️ No se encontró el archivo de iframes.")
-        return
-    with open(json_file, "r", encoding="utf-8") as f:
-        data = json.load(f)
-
-    with open(html_file, "w", encoding="utf-8") as f:
-        f.write("""
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Uploaded Video Iframes</title>
-  <style>
-    body { font-family: sans-serif; padding: 20px; background-color: #f8f8f8; }
-    .video-block { margin-bottom: 40px; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-    .iframe-container { margin-top: 10px; }
-    .copy-button { margin-top: 10px; padding: 6px 12px; background-color: #007BFF; color: white; border: none; border-radius: 4px; cursor: pointer; }
-    .copy-button:hover { background-color: #0056b3; }
-    textarea { display: none; }
-  </style>
-</head>
-<body>
-  <h1>Generated Iframes for Uploaded Videos</h1>
-""")
-        for idx, item in enumerate(data):
-            f.write(f"""
-  <div class="video-block">
-    <h3>{item['title']}</h3>
-    <div class="iframe-container">{item['iframe']}</div>
-    <button class="copy-button" onclick="copyIframe('iframe{idx}')">Copy iframe</button>
-    <textarea id="iframe{idx}">{item['iframe']}</textarea>
-  </div>
-""")
-        f.write("""
-<script>
-function copyIframe(id) {
-  const textarea = document.getElementById(id);
-  textarea.style.display = 'block';
-  textarea.select();
-  document.execCommand('copy');
-  textarea.style.display = 'none';
-  alert("Iframe copied to clipboard");
-}
-</script>
-</body>
-</html>
-""")
-    print("📄 HTML generated:", html_file)
 
 # ---------------- CLI ----------------
 def main(args=None):
-    if os.path.exists(IFRAME_JSON_FILE):
-        os.remove(IFRAME_JSON_FILE)
 
     parser = argparse.ArgumentParser(description="Upload Zoom videos to YouTube")
     parser.add_argument("--mode", choices=["single", "batch"], required=True, help="Upload mode: single or batch")
@@ -186,7 +136,6 @@ def main(args=None):
         title = os.path.splitext(os.path.basename(args.file))[0]
         if upload_video(youtube, args.file, title):
             record_uploaded_video(args.file)
-            generate_html()
 
     elif args.mode == "batch":
         folder_path = args.folder
@@ -203,7 +152,6 @@ def main(args=None):
             return
 
         upload_all_videos(folder_path)
-        generate_html(json_file=IFRAME_JSON_FILE)
 
 if __name__ == "__main__":
     main()

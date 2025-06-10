@@ -8,6 +8,10 @@ def main():
     from datetime import datetime
     from dotenv import load_dotenv
     import argparse
+    
+    load_dotenv(dotenv_path="config/.env")
+    BASE_PATH = os.getenv("RECORDINGS_BASE_PATH")
+    
 
     parser = argparse.ArgumentParser(description="Automatiza descarga y subida de grabaciones de Zoom")
     parser.add_argument(
@@ -38,7 +42,7 @@ def main():
             sys.exit(1)
         try:
             datetime.strptime(args.date, "%Y-%m-%d")
-        except ValueError:
+        except ValueError: 
             print("❌ The --date format must be YYYY-MM-DD.")
             sys.exit(1)
 
@@ -46,9 +50,7 @@ def main():
         download_zoom(["--date", args.date])
     
     elif args.action == "upload":
-        from dotenv import load_dotenv
-        load_dotenv()
-        BASE_PATH = os.getenv("RECORDINGS_BASE_PATH", "data/grabaciones")
+        
 
         if not args.folder and not args.file and not args.date:
             print("❌ You must provide either --folder, --file, or --date to upload videos.")
@@ -72,8 +74,6 @@ def main():
 
     elif args.action == "all":
         download_zoom(["--date", args.date])
-        load_dotenv()
-        BASE_PATH = os.getenv("RECORDINGS_BASE_PATH", "data/grabaciones")
         folder_path = os.path.join(BASE_PATH, args.date)
         upload_youtube(["--mode", "batch", "--folder", folder_path])
 

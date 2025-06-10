@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,86 +14,52 @@
 </head>
 <body>
   <h1>Iframes generados de videos subidos</h1>
-
-  <div class="video-block">
-    <h3>Administración de la Producción 5-6-2025</h3>
-    <div class="iframe-container"><iframe width="560" height="315" src="https://www.youtube.com/embed/tgIhwQp8oM4?si=CYT4L7C5-A-RXFIO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
-    <button class="copy-button" onclick="copiarIframe('iframe0')">Copiar iframe</button>
-    <textarea id="iframe0"><iframe width="560" height="315" src="https://www.youtube.com/embed/tgIhwQp8oM4?si=CYT4L7C5-A-RXFIO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></textarea>
+  
+  <div id="videos-container">
+    <!-- Los videos se cargarán aquí dinámicamente -->
   </div>
 
-  <div class="video-block">
-    <h3>Administración Pública 5-06-2025</h3>
-    <div class="iframe-container"><iframe width="560" height="315" src="https://www.youtube.com/embed/Mwy777BC1XI?si=CYT4L7C5-A-RXFIO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
-    <button class="copy-button" onclick="copiarIframe('iframe1')">Copiar iframe</button>
-    <textarea id="iframe1"><iframe width="560" height="315" src="https://www.youtube.com/embed/Mwy777BC1XI?si=CYT4L7C5-A-RXFIO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></textarea>
-  </div>
+  <script>
+    // Función para copiar iframes
+    function copiarIframe(id) {
+      const textarea = document.getElementById(id);
+      textarea.style.display = 'block';
+      textarea.select();
+      document.execCommand('copy');
+      textarea.style.display = 'none';
+      alert("Iframe copiado al portapeles");
+    }
 
-  <div class="video-block">
-    <h3>Bases del Desarrollo Emprendedor 5-6-2025</h3>
-    <div class="iframe-container"><iframe width="560" height="315" src="https://www.youtube.com/embed/UR2JAfHPbxs?si=CYT4L7C5-A-RXFIO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
-    <button class="copy-button" onclick="copiarIframe('iframe2')">Copiar iframe</button>
-    <textarea id="iframe2"><iframe width="560" height="315" src="https://www.youtube.com/embed/UR2JAfHPbxs?si=CYT4L7C5-A-RXFIO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></textarea>
-  </div>
+    // Función para cargar y mostrar los iframes desde el JSON
+    async function cargarIframes() {
+      try {
+        const response = await fetch('../data/iframes.json');
+        if (!response.ok) {
+          throw new Error('No se pudo cargar el archivo iframes.json');
+        }
+        const videos = await response.json();
+        const container = document.getElementById('videos-container');
+        
+        videos.forEach((video, index) => {
+          const videoBlock = document.createElement('div');
+          videoBlock.className = 'video-block';
+          videoBlock.innerHTML = `
+            <h3>${video.title}</h3>
+            <div class="iframe-container">${video.iframe}</div>
+            <button class="copy-button" onclick="copiarIframe('iframe${index}')">Copiar iframe</button>
+            <textarea id="iframe${index}">${video.iframe}</textarea>
+          `;
+          container.appendChild(videoBlock);
+        });
+      } catch (error) {
+        console.error('Error al cargar los iframes:', error);
+        document.getElementById('videos-container').innerHTML = 
+          '<p>Error al cargar los videos. Asegúrate de que el archivo iframes.json exista y tenga el formato correcto.</p>';
+      }
+    }
 
-  <div class="video-block">
-    <h3>Didáctica del Currículum para el Nivel Superior 5-6-2025</h3>
-    <div class="iframe-container"><iframe width="560" height="315" src="https://www.youtube.com/embed/H325-iVgjxI?si=CYT4L7C5-A-RXFIO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
-    <button class="copy-button" onclick="copiarIframe('iframe3')">Copiar iframe</button>
-    <textarea id="iframe3"><iframe width="560" height="315" src="https://www.youtube.com/embed/H325-iVgjxI?si=CYT4L7C5-A-RXFIO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></textarea>
-  </div>
-
-  <div class="video-block">
-    <h3>Estudio Técnico y de Producto Inmobiliario 5-6-2025</h3>
-    <div class="iframe-container"><iframe width="560" height="315" src="https://www.youtube.com/embed/VZ7Ywa-cXQc?si=CYT4L7C5-A-RXFIO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
-    <button class="copy-button" onclick="copiarIframe('iframe4')">Copiar iframe</button>
-    <textarea id="iframe4"><iframe width="560" height="315" src="https://www.youtube.com/embed/VZ7Ywa-cXQc?si=CYT4L7C5-A-RXFIO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></textarea>
-  </div>
-
-  <div class="video-block">
-    <h3>Principios de Corretaje 5-6-2025</h3>
-    <div class="iframe-container"><iframe width="560" height="315" src="https://www.youtube.com/embed/pa1TVDoQ5Go?si=CYT4L7C5-A-RXFIO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
-    <button class="copy-button" onclick="copiarIframe('iframe5')">Copiar iframe</button>
-    <textarea id="iframe5"><iframe width="560" height="315" src="https://www.youtube.com/embed/pa1TVDoQ5Go?si=CYT4L7C5-A-RXFIO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></textarea>
-  </div>
-
-  <div class="video-block">
-    <h3>Psicosociología del Consumo 5-06-2025</h3>
-    <div class="iframe-container"><iframe width="560" height="315" src="https://www.youtube.com/embed/jOTa3Q1rHPE?si=CYT4L7C5-A-RXFIO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
-    <button class="copy-button" onclick="copiarIframe('iframe6')">Copiar iframe</button>
-    <textarea id="iframe6"><iframe width="560" height="315" src="https://www.youtube.com/embed/jOTa3Q1rHPE?si=CYT4L7C5-A-RXFIO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></textarea>
-  </div>
-
-  <div class="video-block">
-    <h3>TICs en la Educación Superior - A 5-6-2025</h3>
-    <div class="iframe-container"><iframe width="560" height="315" src="https://www.youtube.com/embed/im3acIwcmh8?si=CYT4L7C5-A-RXFIO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
-    <button class="copy-button" onclick="copiarIframe('iframe7')">Copiar iframe</button>
-    <textarea id="iframe7"><iframe width="560" height="315" src="https://www.youtube.com/embed/im3acIwcmh8?si=CYT4L7C5-A-RXFIO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></textarea>
-  </div>
-
-  <div class="video-block">
-    <h3>Topografía y Geodesia 5-6-2025</h3>
-    <div class="iframe-container"><iframe width="560" height="315" src="https://www.youtube.com/embed/_wFeQnUFLRE?si=CYT4L7C5-A-RXFIO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
-    <button class="copy-button" onclick="copiarIframe('iframe8')">Copiar iframe</button>
-    <textarea id="iframe8"><iframe width="560" height="315" src="https://www.youtube.com/embed/_wFeQnUFLRE?si=CYT4L7C5-A-RXFIO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></textarea>
-  </div>
-
-  <div class="video-block">
-    <h3>Técnicas de la Comunicación Efectiva 5-06-2025</h3>
-    <div class="iframe-container"><iframe width="560" height="315" src="https://www.youtube.com/embed/y4LLIWi4Uwc?si=CYT4L7C5-A-RXFIO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
-    <button class="copy-button" onclick="copiarIframe('iframe9')">Copiar iframe</button>
-    <textarea id="iframe9"><iframe width="560" height="315" src="https://www.youtube.com/embed/y4LLIWi4Uwc?si=CYT4L7C5-A-RXFIO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></textarea>
-  </div>
-
-<script>
-function copiarIframe(id) {
-  const textarea = document.getElementById(id);
-  textarea.style.display = 'block';
-  textarea.select();
-  document.execCommand('copy');
-  textarea.style.display = 'none';
-  alert("Iframe copiado al portapapeles");
-}
-</script>
+    // Cargar los iframes cuando la página se cargue
+    window.onload = cargarIframes;
+  </script>
 </body>
 </html>
