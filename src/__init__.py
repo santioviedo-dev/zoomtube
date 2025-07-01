@@ -1,2 +1,2 @@
-from .download_zoom import main as download_zoom
-from .upload_youtube import main as upload_youtube
+from .zoom import zoom_api as zoom_api
+from .youtube import youtube_api as youtube_api
