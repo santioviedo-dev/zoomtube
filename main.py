@@ -8,7 +8,7 @@ from src.utils.validations import is_valid_date_format
 from src.utils.file_utils import save_iframe_json, clean_iframe_json
 import argparse
 
-def do_download(date):
+def do_download(date, min_duration=10):
     token = zoom_api.get_access_token(ZOOM_ACCOUNT_ID, ZOOM_CLIENT_ID, ZOOM_CLIENT_SECRET)
     users = zoom_api.get_users(token)
 
@@ -22,7 +22,7 @@ def do_download(date):
             print("Descarga cancelada.")
             return [output_path]
 
-    zoom.download_recordings(date, output_path, token, users)
+    zoom.download_recordings(date, output_path, token, users, min_duration)
     return output_path
 
 def do_upload(folder=None, file=None, date=None, title=None):
@@ -75,6 +75,12 @@ def main():
         "--title",
         help="Title for the video (optional, only applies to 'upload one')"
     )
+    parser.add_argument(
+        "--min-duration",
+        help="Minimum duration in minutes for recordings to be downloaded (default: 10)",
+        type=int,
+        default=10
+    )
     args = parser.parse_args()
     
     date = args.date if args.date else (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
@@ -114,7 +120,7 @@ def main():
         do_upload(folder=folder_to_upload)
         
     if args.action == "download":
-        do_download(date)
+        do_download(date, args.min_duration)
     
     elif args.action == "upload":
         if not (args.folder or args.file or date):
