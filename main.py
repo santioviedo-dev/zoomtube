@@ -12,13 +12,11 @@ def do_download(date):
     token = zoom_api.get_access_token(ZOOM_ACCOUNT_ID, ZOOM_CLIENT_ID, ZOOM_CLIENT_SECRET)
     users = zoom_api.get_users(token)
 
-    # Crear carpeta destino
     date_folder = date.replace("/", "-")
     output_path = os.path.join(RECORDINGS_BASE_PATH, date_folder)
     os.makedirs(output_path, exist_ok=True)
 
-    # Verificar si ya hay archivos
-    if os.listdir(output_path):  # si hay al menos un archivo o carpeta
+    if os.listdir(output_path):
         confirm = input(f"⚠️ La carpeta '{output_path}' ya contiene archivos. ¿Deseás continuar con la descarga en ese lugar? (s/n): ").strip().lower()
         if confirm not in ("s", "sí", "si", "y", "yes"):
             print("Descarga cancelada.")
@@ -36,7 +34,6 @@ def do_upload(folder=None, file=None, date=None, title=None):
                 else title
             )
             video_id = list(yt.upload_video(youtube, file, title))
-            # iframe = f'<iframe width="560" height="315" src="https://www.youtube.com/embed/{video_id}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>'
             clean_iframe_json()
             save_iframe_json(video_id)
         elif date:
@@ -48,9 +45,11 @@ def do_upload(folder=None, file=None, date=None, title=None):
             else:
                 print(f"Folder does not exist: {folder_path}")
                 sys.exit(1)
-        else:
+        elif folder:
             videos_id = yt.upload_all_videos(folder)
             save_iframe_json(videos_id)
+        else:
+            print("Upload error. Please try again using the --folder or --file argument.")
 def main():
     parser = argparse.ArgumentParser(description="Automatiza descarga y subida de grabaciones de Zoom")
     parser.add_argument(
@@ -107,7 +106,6 @@ def main():
         if isinstance(output_path, list):
             print("Continuando con la subida de los videos...")
             output_path = output_path[0]
-        # En all el folder viene de la descarga (o del argumento --folder si se especifica)
         folder_to_upload = args.folder if args.folder else output_path
 
         if not os.path.exists(folder_to_upload):
@@ -121,6 +119,7 @@ def main():
     elif args.action == "upload":
         if not (args.folder or args.file or date):
             parser.error("❌ You must provide either --folder, --file, or --date to upload videos.")
+        do_upload(args.folder, args.file, date, args.title)
         
 
 
