@@ -28,8 +28,6 @@ def upload_video(youtube, file_path, title):
 
     if response:
         video_id = response.get("id")
-        # iframe = f'<iframe width="560" height="315" src="https://www.youtube.com/embed/{video_id}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>'
-        # save_iframe_json(title, iframe)
         print("  ✅ Successfully uploaded.")
         return video_id
     return False
