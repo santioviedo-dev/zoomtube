@@ -7,7 +7,7 @@ from ..utils import file_utils
 
 # Download function
 
-def download_recordings(date, output_path, token, users: list):
+def download_recordings(date, output_path, token, users: list, min_duration=10):
     for user in users:
         user_id = user["id"]
         meetings = zoom_api.get_recordings(token, user_id, date)
@@ -16,7 +16,7 @@ def download_recordings(date, output_path, token, users: list):
             duration = meeting.get("duration", 0)
             recording_files = meeting.get("recording_files", [])
 
-            if duration < 15:
+            if duration < min_duration:
                 continue
 
             preferred = next(
