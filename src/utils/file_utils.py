@@ -14,8 +14,13 @@ def load_uploaded_log():
     return set(open(LOG_FILE, "r", encoding="utf-8").read().splitlines()) if os.path.exists(LOG_FILE) else set()
 
 def record_uploaded_video(file_path):
-    with open(LOG_FILE, "a", encoding="utf-8") as f:
-        f.write(file_path + "\n")
+    os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
+    with open(LOG_FILE, 'a+', encoding='utf-8') as f:
+        f.seek(0)
+        contenido = f.read()
+    
+        if file_path not in contenido:
+            f.write(file_path + '\n')
         
 
 def save_iframe_json(videos_id: list, data=[]):
