@@ -6,6 +6,7 @@ from ..utils.config import (
     ZOOM_ACCOUNT_ID, ZOOM_CLIENT_ID, ZOOM_CLIENT_SECRET, RECORDINGS_BASE_PATH
 )
 from ..utils.validations import is_valid_date_format
+from ..utils.audio_utils import has_sufficient_audio_activity
 
 
 def select_preferred_recording(files):
@@ -64,6 +65,11 @@ def download_recordings(date, output_path, token, users: list, min_duration=10):
 
                 print(f"Downloading: {file_path}")
                 zoom_api.download_recording(file_url, file_path, token)
+                
+                if not has_sufficient_audio_activity(file_path, duration):
+                    print(f"🛑 Recording discarded due to silence: {file_path}")
+                    os.remove(file_path)
+                    continue
 
             except Exception as e:
                 print(f" Error processing meeting for user {user_id}: {e}")

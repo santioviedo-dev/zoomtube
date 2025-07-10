@@ -16,6 +16,7 @@ Automate the process of downloading Zoom recordings and uploading them to YouTub
 - Zoom API credentials (Account ID, Client ID, Client Secret)
 - YouTube API credentials (`client_secret.json`)
 - Google account with YouTube API enabled
+- FFmpeg installed and available in PATH (https://ffmpeg.org/)
 
 ## Setup
 
