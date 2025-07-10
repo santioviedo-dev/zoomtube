@@ -32,7 +32,7 @@ def has_sufficient_audio_activity(file_path, total_duration, silence_threshold_d
         silence_ends = [float(m.group(1)) for m in re.finditer(r"silence_end: (\d+(\.\d+)?)", stderr_output)]
 
         if not silence_starts and not silence_ends:
-            return True  # No silencios detectados
+            return True
 
         if len(silence_starts) > len(silence_ends):
             silence_ends.append(total_duration)

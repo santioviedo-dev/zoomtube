@@ -10,7 +10,7 @@ from ..utils.audio_utils import has_sufficient_audio_activity
 
 
 def select_preferred_recording(files):
-    """Selecciona la mejor grabación MP4 basada en prioridad."""
+    """Selects the best MP4 recording based on priority."""
     for view_type in ["shared_screen_with_gallery_view", "shared_screen_with_speaker_view"]:
         preferred = next(
             (f for f in files if f.get("file_type") == "MP4" and f.get("recording_type") == view_type),
@@ -32,7 +32,7 @@ def get_unique_filename(output_path, base_name):
     return file_path
 
 
-def download_recordings(date, output_path, token, users: list, min_duration=10):
+def download_recordings(date, output_path, token, users: list, min_duration=5):
     """Download Zoom recordings for all users by filtering by minimum length."""
     for user in users:
         user_id = user.get("id")
@@ -66,8 +66,9 @@ def download_recordings(date, output_path, token, users: list, min_duration=10):
                 print(f"Downloading: {file_path}")
                 zoom_api.download_recording(file_url, file_path, token)
                 
-                if not has_sufficient_audio_activity(file_path, duration):
-                    print(f"🛑 Recording discarded due to silence: {file_path}")
+                duration_secs = duration * 60
+                if not has_sufficient_audio_activity(file_path, duration_secs):
+                    print(f"Recording discarded due to silence: {file_path}")
                     os.remove(file_path)
                     continue
 
