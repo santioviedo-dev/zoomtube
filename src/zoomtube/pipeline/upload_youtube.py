@@ -6,10 +6,9 @@ from googleapiclient.http import MediaFileUpload
 from ..utils.config import VIDEO_EXTENSIONS
 from ..utils.file_utils import (
     record_uploaded_video,
-    save_iframe_json,
     load_uploaded_log,
 )
-from .youtube_api import get_authenticated_service
+from ..clients.youtube_api import get_authenticated_service
 
 
 # ---------------- Upload ----------------

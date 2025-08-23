@@ -1,6 +1,6 @@
 import os
 from datetime import datetime, timedelta
-from . import zoom_api
+from ..clients import zoom_api
 from ..utils import file_utils
 from ..utils.config import (
     ZOOM_ACCOUNT_ID, ZOOM_CLIENT_ID, ZOOM_CLIENT_SECRET, RECORDINGS_BASE_PATH
