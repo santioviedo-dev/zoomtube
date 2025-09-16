@@ -1,0 +1,2 @@
+[console_scripts]
+zoomtube = zoomtube.cli:main

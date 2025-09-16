@@ -1,5 +1,5 @@
 # Configs y credenciales
-config/.env
+.env
 config/client_secret.json
 config/token.pickle
 

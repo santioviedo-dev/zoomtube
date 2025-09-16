@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zoomtube"
+version = "0.1.0"
+description = "Automatiza la descarga de grabaciones de Zoom y la subida a YouTube"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+  { name = "Tu Nombre", email = "tu.email@example.com" }
+]
+requires-python = ">=3.10"
+
+dependencies = [
+  "requests>=2.31.0",
+  "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "flake8",
+  "black",
+]
+
+[project.scripts]
+zoomtube = "zoomtube.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["zoomtube*"]
