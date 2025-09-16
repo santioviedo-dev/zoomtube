@@ -42,6 +42,18 @@ def list_users(token: str) -> List[dict]:
     return resp.json().get("users", [])
 
 
+def _select_preferred_file(files: List[dict], preferences: List[str]) -> Optional[dict]:
+    """
+    Selecciona un archivo de grabación según el orden de preferencia.
+    Devuelve el primero que exista o None si no hay coincidencias.
+    """
+    for pref in preferences:
+        for f in files:
+            if f.get("recording_type") == pref:
+                return f
+    return None
+
+
 def list_recordings(
     token: str,
     user_id: str,
@@ -49,11 +61,13 @@ def list_recordings(
     end_date: Optional[str] = None,
     min_duration: Optional[int] = None,
     max_duration: Optional[int] = None,
-    types: Optional[List[str]] = None,
+    recording_types: Optional[List[str]] = None,
+    preferred_types: Optional[List[str]] = None,
 ) -> List[dict]:
     """
     Devuelve la lista de reuniones grabadas para un usuario en un rango de fechas.
-    Aplica filtros de duración y tipos si se pasan.
+    - recording_types: lista inclusiva (descarga todas las coincidencias).
+    - preferred_types: lista de preferencia (descarga solo la primera que aparezca).
     """
     end_date = end_date or start_date
     url = f"{ZOOM_API_BASE}/users/{user_id}/recordings?from={start_date}&to={end_date}"
@@ -70,15 +84,28 @@ def list_recordings(
         if max_duration and duration > max_duration:
             continue
 
-        if types:
-            files = [f for f in m.get("recording_files", []) if f.get("recording_type") in types]
-        else:
-            files = m.get("recording_files", [])
-
+        files = m.get("recording_files", [])
         if not files:
             continue
 
-        m["recording_files"] = files
+        if preferred_types:
+            # Modo prioridad: tomar solo la primera coincidencia
+            selected = _select_preferred_file(files, preferred_types)
+            if not selected:
+                continue
+            m["recording_files"] = [selected]
+
+        elif recording_types:
+            # Modo inclusivo: tomar todas las que coincidan
+            selected = [f for f in files if f.get("recording_type") in recording_types]
+            if not selected:
+                continue
+            m["recording_files"] = selected
+
+        else:
+            # Si no se especifica nada, usar todos los archivos disponibles
+            m["recording_files"] = files
+
         filtered.append(m)
 
     return filtered

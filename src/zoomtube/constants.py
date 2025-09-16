@@ -8,6 +8,13 @@ ZOOM_RECORDING_TYPES = [
     "timeline"
 ]
 
+DEFAULT_PREFERRED_TYPES = [
+    "shared_screen_with_speaker_view",
+    "shared_screen_with_gallery_view",
+    "gallery_view",
+    "speaker_view",
+]
+
 VIDEO_EXTENSIONS = [".mp4", ".mov", ".avi", ".mkv"]
 
 

@@ -21,12 +21,22 @@ def main():
     dl.add_argument("--min-duration", type=int, default=10)
     dl.add_argument("--max-duration", type=int)
     dl.add_argument("--output-path")
-    dl.add_argument("--recording-type", nargs="+", choices=constants.ZOOM_RECORDING_TYPES)
+
+    # Dos modos de selección de grabación
+    dl.add_argument("--recording-type", nargs="+", choices=constants.ZOOM_RECORDING_TYPES,
+                    help="Descargar todas las grabaciones que coincidan con los tipos")
+    dl.add_argument("--recording-type-preferred", nargs="+", choices=constants.ZOOM_RECORDING_TYPES,
+                    help="Descargar solo la primera grabación encontrada según orden de preferencia")
 
     # Flags para análisis de audio
-    dl.add_argument("--check-audio", action="store_true", help="Verificar que las grabaciones tengan audio suficiente", default=True)
-    dl.add_argument("--silence-threshold", type=int, default=constants.DEFAULT_SILENCE_THRESHOLD_DB, help="Umbral de silencio en dB (default: -35)")
-    dl.add_argument("--silence-ratio", type=float, default=constants.DEFAULT_SILENCE_RATIO, help="Proporción máxima de silencio tolerada (default: 0.9)")
+    dl.add_argument("--check-audio", action="store_true",
+                    help="Verificar que las grabaciones tengan audio suficiente", default=True)
+    dl.add_argument("--silence-threshold", type=int,
+                    default=constants.DEFAULT_SILENCE_THRESHOLD_DB,
+                    help="Umbral de silencio en dB (default: -35)")
+    dl.add_argument("--silence-ratio", type=float,
+                    default=constants.DEFAULT_SILENCE_RATIO,
+                    help="Proporción máxima de silencio tolerada (default: 0.9)")
 
     # --- upload ---
     upload_parser = sub.add_parser("upload", help="Upload videos to YouTube")
@@ -63,6 +73,11 @@ def main():
     # --- Dispatch ---
     if args.cmd == "download":
         logger.info("Iniciando descarga de grabaciones...")
+
+        if args.recording_type and args.recording_type_preferred:
+            logger.error("No se puede usar --recording-type y --recording-type-preferred al mismo tiempo")
+            return
+
         download.run(
             start_date=args.start_date,
             end_date=args.end_date,
@@ -71,6 +86,7 @@ def main():
             max_duration=args.max_duration,
             output_path=args.output_path,
             recording_types=args.recording_type,
+            preferred_types=args.recording_type_preferred,
             check_audio=args.check_audio,
             silence_threshold=args.silence_threshold,
             silence_ratio=args.silence_ratio,

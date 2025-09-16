@@ -22,11 +22,7 @@ def run(date=None, check_audio=True):
     download.run(
         date=date,
         min_duration=10,
-        recording_types=[
-            "shared_screen_with_speaker_view",
-            "shared_screen_with_gallery_view",
-            "gallery_view"
-        ],
+        preferred_types=config.DEFAULT_PREFERRED_TYPES,
         output_path=config.RECORDINGS_BASE_PATH,
         check_audio=check_audio,
         silence_threshold=config.DEFAULT_SILENCE_THRESHOLD_DB,
