@@ -1,4 +1,3 @@
-# src/zoomtube/pipeline/upload.py
 import os
 from pathlib import Path
 from typing import List, Optional
@@ -8,6 +7,7 @@ from zoomtube.clients import youtube_client
 from zoomtube.utils.logger import logger
 from zoomtube.constants import VIDEO_EXTENSIONS
 from zoomtube.utils.recordings import sanitize_filename, get_unique_filename
+from zoomtube.utils import uploads_registry  # nuevo import
 
 
 def run_single(
@@ -20,11 +20,11 @@ def run_single(
     schedule: Optional[str] = None,
 ) -> Optional[str]:
     """
-    Sube un solo video a YouTube.
+    Sube un solo video a YouTube y lo registra en uploads.json.
 
     Args:
         path: ruta al archivo de video
-        title: título del video
+        title: título del video (si None, se usa el nombre del archivo)
         description: descripción opcional
         tags: lista de tags
         privacy_status: public | private | unlisted
@@ -34,14 +34,20 @@ def run_single(
     Returns:
         video_id de YouTube o None si falla
     """
-    youtube = youtube_client.get_authenticated_service()
     file_path = Path(path)
     title = title or sanitize_filename(file_path.stem)
 
     if not file_path.exists() or not file_path.is_file():
         logger.error(f"Archivo inválido: {file_path}")
+        uploads_registry.register_upload(str(file_path), None, title, "failed")
         return None
 
+    # Chequear si ya se subió
+    if uploads_registry.is_uploaded(str(file_path)):
+        logger.info(f"Ya estaba subido: {file_path}")
+        return None
+
+    youtube = youtube_client.get_authenticated_service()
     media = MediaFileUpload(str(file_path), chunksize=-1, resumable=True)
 
     body = {
@@ -72,9 +78,11 @@ def run_single(
         if response:
             video_id = response.get("id")
             logger.info(f"✅ Subida completada: {video_id}")
+            uploads_registry.register_upload(str(file_path), video_id, title, "success")
             return video_id
     except Exception as e:
         logger.error(f"❌ Error subiendo {file_path}: {e}")
+        uploads_registry.register_upload(str(file_path), None, title, "failed")
 
     return None
 
@@ -89,8 +97,8 @@ def run_batch(
 ) -> List[str]:
     """
     Sube múltiples videos desde una carpeta.
+    Omite los que ya estén subidos según uploads.json.
     """
-    youtube = youtube_client.get_authenticated_service()
     folder_path = Path(folder)
 
     if not folder_path.exists() or not folder_path.is_dir():
@@ -104,6 +112,11 @@ def run_batch(
 
         file_path = folder_path / file_name
         title = sanitize_filename(file_path.stem)
+
+        # Saltar si ya estaba subido
+        if uploads_registry.is_uploaded(str(file_path)):
+            logger.info(f"Ya estaba subido (omitido): {file_path}")
+            continue
 
         video_id = run_single(
             path=str(file_path),

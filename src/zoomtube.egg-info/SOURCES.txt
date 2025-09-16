@@ -16,6 +16,7 @@ src/zoomtube/clients/youtube_client.py
 src/zoomtube/clients/zoom_client.py
 src/zoomtube/pipeline/__init__.py
 src/zoomtube/pipeline/download.py
+src/zoomtube/pipeline/process.py
 src/zoomtube/pipeline/upload.py
 src/zoomtube/utils/__init__.py
 src/zoomtube/utils/audio.py

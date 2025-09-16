@@ -10,3 +10,30 @@ output/iframes_clean.html
 *.log
 __pycache__/
 *.pyc
+src/state/uploads.json
+
+# Archivos de empaquetado Python
+*.egg-info/
+*.egg-info/*
+*.egg
+dist/
+build/
+
+# Virtualenv
+.venv/
+venv/
+ENV/
+env/
+
+# Cache de Python
+.pytest_cache/
+.mypy_cache/
+__pypackages__/
+.coverage
+*.cover
+htmlcov/
+
+# Archivos de IDE/Editor
+.vscode/
+.idea/
+*.swp
