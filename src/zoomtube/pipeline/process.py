@@ -3,7 +3,7 @@ from pathlib import Path
 from zoomtube.pipeline import download, upload
 from zoomtube import config
 from zoomtube.utils.logger import logger
-import zoomtube.constants as constsants
+import zoomtube.constants as constants
 
 
 def run(date=None, check_audio=True):
@@ -23,11 +23,11 @@ def run(date=None, check_audio=True):
     download.run(
         date=date,
         min_duration=10,
-        preferred_types=constsants.DEFAULT_PREFERRED_TYPES,
+        preferred_types=constants.DEFAULT_PREFERRED_TYPES,
         output_path=config.RECORDINGS_BASE_PATH,
         check_audio=check_audio,
-        silence_threshold=config.DEFAULT_SILENCE_THRESHOLD_DB,
-        silence_ratio=config.DEFAULT_SILENCE_RATIO,
+        silence_threshold=constants.DEFAULT_SILENCE_THRESHOLD_DB,
+        silence_ratio=constants.DEFAULT_SILENCE_RATIO,
     )
 
     # --- Subida ---
