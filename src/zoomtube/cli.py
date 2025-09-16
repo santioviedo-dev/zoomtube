@@ -2,6 +2,7 @@ from argparse import ArgumentParser
 from zoomtube.pipeline import download, upload, process
 import zoomtube.constants as constants
 from zoomtube.utils.logger import get_logger
+from zoomtube.utils import uploads_registry, downloads_registry, recordings_registry  # <-- agregado
 
 
 def main():
@@ -21,14 +22,10 @@ def main():
     dl.add_argument("--min-duration", type=int, default=10)
     dl.add_argument("--max-duration", type=int)
     dl.add_argument("--output-path")
-
-    # Dos modos de selección de grabación
     dl.add_argument("--recording-type", nargs="+", choices=constants.ZOOM_RECORDING_TYPES,
                     help="Descargar todas las grabaciones que coincidan con los tipos")
     dl.add_argument("--recording-type-preferred", nargs="+", choices=constants.ZOOM_RECORDING_TYPES,
                     help="Descargar solo la primera grabación encontrada según orden de preferencia")
-
-    # Flags para análisis de audio
     dl.add_argument("--check-audio", action="store_true",
                     help="Verificar que las grabaciones tengan audio suficiente", default=True)
     dl.add_argument("--silence-threshold", type=int,
@@ -41,7 +38,6 @@ def main():
     # --- upload ---
     upload_parser = sub.add_parser("upload", help="Upload videos to YouTube")
     upload_sub = upload_parser.add_subparsers(dest="mode", required=True)
-
     single = upload_sub.add_parser("file", help="Upload a single video")
     single.add_argument("path", help="Path to video file")
     single.add_argument("--title", required=False)
@@ -65,19 +61,25 @@ def main():
     proc.add_argument("--check-audio", action="store_true", default=True,
                       help="Verificar que las grabaciones tengan audio suficiente")
 
+    # --- list ---
+    list_parser = sub.add_parser("list", help="List registry data (uploads, downloads, recordings)")
+    list_sub = list_parser.add_subparsers(dest="list_mode", required=True)
+
+    downloads_cmd = list_sub.add_parser("downloads", help="List downloaded recordings from registry")
+    uploads_cmd = list_sub.add_parser("uploads", help="List uploaded videos from registry")
+    recordings_cmd = list_sub.add_parser("recordings", help="List all recordings found in Zoom (with file types)")
+
     args = p.parse_args()
 
-    # --- Configurar logger según flags ---
+    # --- Configurar logger ---
     logger = get_logger(verbose=args.verbose, quiet=args.quiet)
 
     # --- Dispatch ---
     if args.cmd == "download":
         logger.info("Iniciando descarga de grabaciones...")
-
         if args.recording_type and args.recording_type_preferred:
             logger.error("No se puede usar --recording-type y --recording-type-preferred al mismo tiempo")
             return
-
         download.run(
             start_date=args.start_date,
             end_date=args.end_date,
@@ -118,6 +120,35 @@ def main():
     elif args.cmd == "process":
         logger.info("Ejecutando pipeline completo (descarga + subida)...")
         process.run(date=args.date, check_audio=args.check_audio)
+
+    elif args.cmd == "list":
+        if args.list_mode == "uploads":
+            uploads = uploads_registry.get_all_uploads()
+            if not uploads:
+                print("No hay registros de subidas aún.")
+                return
+            print("\n=== Subidas registradas ===")
+            for u in uploads:
+                print(f"- {u['uploaded_at']} | {u['status']} | {u['title']} ({u['local_path']}) → {u.get('youtube_id')}")
+        elif args.list_mode == "downloads":
+            downloads = downloads_registry.get_all_downloads()
+            if not downloads:
+                print("No hay registros de descargas aún.")
+                return
+            print("\n=== Descargas registradas ===")
+            for d in downloads:
+                print(f"- {d['downloaded_at']} | {d['status']} | {d['topic']} "
+                      f"({d['duration']} min) → {d['local_path']}")
+        elif args.list_mode == "recordings":
+            recordings = recordings_registry.get_all_recordings()
+            if not recordings:
+                print("No hay registros de grabaciones aún.")
+                return
+            print("\n=== Grabaciones encontradas ===")
+            for r in recordings:
+                print(f"* {r['start_time']} | {r['topic']} ({r['duration']} min)")
+                for f in r["files"]:
+                    print(f"   - {f['type']}: {f['status']}")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,44 @@
+[
+  {
+    "meeting_id": 81663332004,
+    "topic": "Práctica Profesional Supervisada I - 15-9-2025",
+    "start_time": "2025-09-15T22:55:01Z",
+    "duration": 78,
+    "files": [
+      {
+        "type": "shared_screen_with_speaker_view",
+        "status": "downloaded"
+      },
+      {
+        "type": "shared_screen",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      }
+    ],
+    "registered_at": "2025-09-16T13:47:07"
+  },
+  {
+    "meeting_id": 88984897381,
+    "topic": "Sociedades - 15-9-2025",
+    "start_time": "2025-09-15T22:52:49Z",
+    "duration": 78,
+    "files": [
+      {
+        "type": "shared_screen",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "shared_screen_with_speaker_view",
+        "status": "downloaded"
+      }
+    ],
+    "registered_at": "2025-09-16T13:49:27"
+  }
+]

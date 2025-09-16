@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Optional
 from zoomtube.utils.audio import has_sufficient_audio_activity
+from zoomtube.utils import downloads_registry, recordings_registry
 
 from zoomtube.clients import zoom_client
 from zoomtube.utils.logger import logger
@@ -31,19 +32,7 @@ def run(
 ) -> None:
     """
     Descargar grabaciones de Zoom y guardarlas en disco.
-
-    Args:
-        start_date: fecha inicio (YYYY-MM-DD)
-        end_date: fecha fin (YYYY-MM-DD)
-        date: atajo para un único día (YYYY-MM-DD)
-        min_duration: duración mínima en minutos
-        max_duration: duración máxima en minutos
-        output_path: carpeta de destino
-        recording_types: tipos de grabación (inclusivo, descarga todas las coincidencias)
-        preferred_types: tipos de grabación con prioridad (descarga solo la primera coincidencia)
-        check_audio: si True, descarta grabaciones con poco audio
-        silence_threshold: umbral en dB para detectar silencio
-        silence_ratio: proporción máxima de silencio tolerada (0–1)
+    También registra TODAS las grabaciones encontradas (aunque no se descarguen).
     """
 
     # Resolver fechas
@@ -80,30 +69,74 @@ def run(
             end_date=end_date,
             min_duration=min_duration,
             max_duration=max_duration,
-            recording_types=recording_types,
-            preferred_types=preferred_types,
         )
 
         for meeting in meetings:
+            meeting_id = meeting.get("id")
             topic = sanitize_filename(meeting.get("topic", "sin_titulo"))
             duration = meeting.get("duration", 0)
+            start_time = meeting.get("start_time")
             files = meeting.get("recording_files", [])
 
             if not files:
                 logger.warning(f"Reunión sin grabaciones válidas: {topic}")
                 continue
 
-            for file_info in files:
+            # Registrar todas como disponibles
+            recordings_registry.register_meeting(
+                meeting_id=meeting_id,
+                topic=topic,
+                start_time=start_time,
+                duration=duration,
+                files=[{"type": f.get("recording_type"), "status": "available"} for f in files],
+            )
+
+            # Selección de qué descargar
+            files_to_process = []
+
+            if preferred_types:
+                # Buscar la primera que exista en orden de preferencia
+                chosen = None
+                for pref in preferred_types:
+                    chosen = next((f for f in files if f.get("recording_type") == pref), None)
+                    if chosen:
+                        files_to_process = [chosen]
+                        break
+                # Las demás se marcan como omitidas
+                for f in files:
+                    if f not in files_to_process:
+                        recordings_registry.update_file_status(meeting_id, f.get("recording_type"), "skipped_by_preference")
+
+            elif recording_types:
+                # Incluir solo las que coinciden
+                files_to_process = [f for f in files if f.get("recording_type") in recording_types]
+                for f in files:
+                    if f not in files_to_process:
+                        recordings_registry.update_file_status(meeting_id, f.get("recording_type"), "skipped_by_preference")
+            else:
+                # Si no se especifica, procesar todas
+                files_to_process = files
+
+            # Descargar/analizar cada archivo elegido
+            for file_info in files_to_process:
+                file_type = file_info.get("recording_type")
                 file_url = file_info.get("download_url")
                 if not file_url:
-                    logger.warning(f"Grabación sin URL: {topic}")
+                    logger.warning(f"Grabación sin URL: {topic} ({file_type})")
+                    recordings_registry.update_file_status(meeting_id, file_type, "failed")
                     continue
 
                 dest_path = get_unique_filename(target_dir, f"{topic}.mp4")
 
                 try:
-                    logger.info(f"Descargando {topic} ({duration} min) → {dest_path}")
+                    logger.info(f"Descargando {topic} ({duration} min) [{file_type}] → {dest_path}")
                     zoom_client.download_recording(token, file_url, dest_path)
+
+                    # Registrar inmediatamente como pendiente
+                    downloads_registry.register_download(
+                        str(dest_path), topic, duration, "pending_audio_check"
+                    )
+                    recordings_registry.update_file_status(meeting_id, file_type, "downloaded")
 
                     # Chequeo opcional de audio
                     if check_audio:
@@ -115,8 +148,21 @@ def run(
                             silence_ratio_threshold=silence_ratio,
                         ):
                             logger.warning(f"Descartada por silencio: {dest_path}")
+                            downloads_registry.register_download(
+                                str(dest_path), topic, duration, "discarded_silence"
+                            )
+                            recordings_registry.update_file_status(meeting_id, file_type, "discarded_audio")
                             dest_path.unlink(missing_ok=True)
                             continue
 
+                    # Si pasa audio o no se chequea → éxito
+                    downloads_registry.register_download(
+                        str(dest_path), topic, duration, "success"
+                    )
+
                 except Exception as e:
                     logger.error(f"Error descargando {topic}: {e}")
+                    downloads_registry.register_download(
+                        str(dest_path), topic, duration, "failed"
+                    )
+                    recordings_registry.update_file_status(meeting_id, file_type, "failed")

@@ -1,0 +1,30 @@
+[
+  {
+    "local_path": "D:\\pruebas\\grabaciones\\2025-09-15\\Práctica Profesional Supervisada I - 15-9-2025 (2).mp4",
+    "topic": "Práctica Profesional Supervisada I - 15-9-2025",
+    "duration": 78,
+    "downloaded_at": "2025-09-16T13:17:38",
+    "status": "pending_audio_check"
+  },
+  {
+    "local_path": "D:\\pruebas\\grabaciones\\2025-09-15\\Práctica Profesional Supervisada I - 15-9-2025 (3).mp4",
+    "topic": "Práctica Profesional Supervisada I - 15-9-2025",
+    "duration": 78,
+    "downloaded_at": "2025-09-16T13:31:09",
+    "status": "success"
+  },
+  {
+    "local_path": "D:\\pruebas\\grabaciones\\2025-09-15\\Práctica Profesional Supervisada I - 15-9-2025 (4).mp4",
+    "topic": "Práctica Profesional Supervisada I - 15-9-2025",
+    "duration": 78,
+    "downloaded_at": "2025-09-16T13:49:25",
+    "status": "success"
+  },
+  {
+    "local_path": "D:\\pruebas\\grabaciones\\2025-09-15\\Sociedades - 15-9-2025 (2).mp4",
+    "topic": "Sociedades - 15-9-2025",
+    "duration": 78,
+    "downloaded_at": "2025-09-16T13:49:42",
+    "status": "pending_audio_check"
+  }
+]
