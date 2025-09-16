@@ -33,6 +33,7 @@ if LOCAL_ENV.exists():
 ZOOM_ACCOUNT_ID = os.getenv("ZOOM_ACCOUNT_ID")
 ZOOM_CLIENT_ID = os.getenv("ZOOM_CLIENT_ID")
 ZOOM_CLIENT_SECRET = os.getenv("ZOOM_CLIENT_SECRET")
+RECORDINGS_BASE_PATH = os.getenv("RECORDINGS_BASE_PATH", str(DATA_DIR / "recordings"))
 
 # --- Variables de YouTube ---
 API_SERVICE_NAME = "youtube"
