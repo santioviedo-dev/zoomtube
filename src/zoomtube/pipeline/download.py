@@ -55,6 +55,8 @@ def run(
 
     # Carpeta destino
     target_dir = Path(output_path) if output_path else get_download_dir()
+    if date:
+        target_dir = target_dir / date
     target_dir.mkdir(parents=True, exist_ok=True)
 
     logger.info(f"Buscando grabaciones de {start_date} a {end_date}")
