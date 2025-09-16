@@ -24,7 +24,8 @@ def run(date=None, check_audio=True):
         min_duration=10,
         recording_types=[
             "shared_screen_with_speaker_view",
-            "speaker_view"
+            "shared_screen_with_gallery_view",
+            "gallery_view"
         ],
         output_path=config.RECORDINGS_BASE_PATH,
         check_audio=check_audio,

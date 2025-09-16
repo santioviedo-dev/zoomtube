@@ -1,4 +1,4 @@
-# src/zoom2yt/utils/logger.py
+# src/zoomtube/utils/logger.py
 import logging
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
@@ -13,17 +13,17 @@ def _get_log_dir() -> Path:
 
     if system == "windows":
         base = Path(os.getenv("APPDATA", Path.home() / "AppData" / "Roaming"))
-        log_dir = base / "zoom2yt" / "logs"
+        log_dir = base / "zoomtube" / "logs"
     elif system == "darwin":  # macOS
-        log_dir = Path.home() / "Library" / "Logs" / "zoom2yt"
+        log_dir = Path.home() / "Library" / "Logs" / "zoomtube"
     else:  # Linux y otros
-        log_dir = Path.home() / ".local" / "share" / "zoom2yt" / "logs"
+        log_dir = Path.home() / ".local" / "share" / "zoomtube" / "logs"
 
     log_dir.mkdir(parents=True, exist_ok=True)
     return log_dir
 
 
-def get_logger(name: str = "zoom2yt", verbose: bool = False, quiet: bool = False) -> logging.Logger:
+def get_logger(name: str = "zoomtube", verbose: bool = False, quiet: bool = False) -> logging.Logger:
     """
     Configura un logger con salida a consola y archivo rotativo.
     """
@@ -48,7 +48,7 @@ def get_logger(name: str = "zoom2yt", verbose: bool = False, quiet: bool = False
     console_handler.setFormatter(console_fmt)
 
     # --- Archivo ---
-    log_file = _get_log_dir() / "zoom2yt.log"
+    log_file = _get_log_dir() / "zoomtube.log"
     file_handler = RotatingFileHandler(log_file, maxBytes=1_000_000, backupCount=5, encoding="utf-8")
     file_handler.setLevel(logging.DEBUG)
     file_fmt = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
