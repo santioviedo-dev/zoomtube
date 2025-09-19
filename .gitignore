@@ -11,6 +11,8 @@ output/iframes_clean.html
 __pycache__/
 *.pyc
 src/state/uploads.json
+src/state/downloads.json
+src/state/recordings.json
 
 # Archivos de empaquetado Python
 *.egg-info/

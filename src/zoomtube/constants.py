@@ -13,7 +13,8 @@ DEFAULT_PREFERRED_TYPES = [
     "shared_screen_with_gallery_view",
     "shared_screen_only",
     "gallery_view",
-    "speaker_view",
+    "active_speaker",
+    "speaker_view"
 ]
 
 VIDEO_EXTENSIONS = [".mp4", ".mov", ".avi", ".mkv"]

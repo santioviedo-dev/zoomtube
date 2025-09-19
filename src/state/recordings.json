@@ -18,7 +18,7 @@
         "status": "skipped_by_preference"
       }
     ],
-    "registered_at": "2025-09-16T13:47:07"
+    "registered_at": "2025-09-16T13:57:20"
   },
   {
     "meeting_id": 88984897381,
@@ -39,6 +39,582 @@
         "status": "downloaded"
       }
     ],
-    "registered_at": "2025-09-16T13:49:27"
+    "registered_at": "2025-09-16T13:59:37"
+  },
+  {
+    "meeting_id": 83423917085,
+    "topic": "Seminario de Investigación Social y Educativa - B - 15-9-2025",
+    "start_time": "2025-09-15T23:52:35Z",
+    "duration": 63,
+    "files": [
+      {
+        "type": "chat_file",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "gallery_view",
+        "status": "available"
+      }
+    ],
+    "registered_at": "2025-09-16T14:00:57"
+  },
+  {
+    "meeting_id": 85188487968,
+    "topic": "Seminario de Investigación Social y Educativa - A - 16-9-2025",
+    "start_time": "2025-09-16T23:57:42Z",
+    "duration": 116,
+    "files": [
+      {
+        "type": "gallery_view",
+        "status": "downloaded"
+      },
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      }
+    ],
+    "registered_at": "2025-09-17T07:37:01"
+  },
+  {
+    "meeting_id": 81546252845,
+    "topic": "Principios de Derechos Reales y Registrales - 16-9-2025",
+    "start_time": "2025-09-16T20:59:41Z",
+    "duration": 67,
+    "files": [
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "gallery_view",
+        "status": "downloaded"
+      },
+      {
+        "type": "chat_file",
+        "status": "skipped_by_preference"
+      }
+    ],
+    "registered_at": "2025-09-17T07:39:07"
+  },
+  {
+    "meeting_id": 82606836766,
+    "topic": "Calidad Educativa y Evaluación Institucional 16-9-2025",
+    "start_time": "2025-09-16T21:58:48Z",
+    "duration": 23,
+    "files": [
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "gallery_view",
+        "status": "downloaded"
+      }
+    ],
+    "registered_at": "2025-09-17T07:40:16"
+  },
+  {
+    "meeting_id": 81175851679,
+    "topic": "Administración Estratégica - 16-9-2025",
+    "start_time": "2025-09-16T22:00:04Z",
+    "duration": 100,
+    "files": [
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "gallery_view",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "chat_file",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "shared_screen_with_speaker_view",
+        "status": "downloaded"
+      },
+      {
+        "type": "shared_screen",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "shared_screen_with_gallery_view",
+        "status": "skipped_by_preference"
+      }
+    ],
+    "registered_at": "2025-09-17T07:40:41"
+  },
+  {
+    "meeting_id": 81737338920,
+    "topic": "Arquitectura, Construcción y Urbanismo I - 16-9-2025",
+    "start_time": "2025-09-16T22:30:56Z",
+    "duration": 69,
+    "files": [
+      {
+        "type": "shared_screen_with_gallery_view",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "gallery_view",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "shared_screen",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "shared_screen_with_speaker_view",
+        "status": "downloaded"
+      },
+      {
+        "type": "chat_file",
+        "status": "skipped_by_preference"
+      }
+    ],
+    "registered_at": "2025-09-17T07:43:33"
+  },
+  {
+    "meeting_id": 89760152009,
+    "topic": "Didáctica del Currículum para el nivel secundario - B - 16-9-2025",
+    "start_time": "2025-09-16T22:47:16Z",
+    "duration": 108,
+    "files": [
+      {
+        "type": "shared_screen_with_speaker_view",
+        "status": "downloaded"
+      },
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "gallery_view",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "shared_screen_with_gallery_view",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "shared_screen",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "chat_file",
+        "status": "skipped_by_preference"
+      }
+    ],
+    "registered_at": "2025-09-17T07:45:43"
+  },
+  {
+    "meeting_id": 83054255038,
+    "topic": "Didáctica del Currículum para el nivel secundario - A - 16-9-2025",
+    "start_time": "2025-09-16T20:52:54Z",
+    "duration": 95,
+    "files": [
+      {
+        "type": "shared_screen_with_speaker_view",
+        "status": "downloaded"
+      },
+      {
+        "type": "shared_screen_with_gallery_view",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "gallery_view",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "shared_screen",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "chat_file",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      }
+    ],
+    "registered_at": "2025-09-17T07:49:20"
+  },
+  {
+    "meeting_id": 86411644153,
+    "topic": "POLÍTICA, ORGANIZACIÓN Y GESTIÓN DE LA EDUCACIÓN SUPERIOR 16-9-2025",
+    "start_time": "2025-09-16T23:49:22Z",
+    "duration": 73,
+    "files": [
+      {
+        "type": "chat_file",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "gallery_view",
+        "status": "downloaded"
+      },
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      }
+    ],
+    "registered_at": "2025-09-17T07:52:19"
+  },
+  {
+    "meeting_id": 89673746671,
+    "topic": "Redes - 16-9-2025",
+    "start_time": "2025-09-16T20:58:27Z",
+    "duration": 62,
+    "files": [
+      {
+        "type": "chat_file",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "gallery_view",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "shared_screen_with_gallery_view",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "shared_screen_with_speaker_view",
+        "status": "downloaded"
+      },
+      {
+        "type": "shared_screen",
+        "status": "skipped_by_preference"
+      }
+    ],
+    "registered_at": "2025-09-17T07:55:24"
+  },
+  {
+    "meeting_id": 84357472194,
+    "topic": "Principios de Inteligencia Artificial - 17-9-2025",
+    "start_time": "2025-09-17T23:58:28Z",
+    "duration": 58,
+    "files": [
+      {
+        "type": "shared_screen",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "chat_file",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "shared_screen_with_speaker_view",
+        "status": "downloaded"
+      }
+    ],
+    "registered_at": "2025-09-18T07:46:09"
+  },
+  {
+    "meeting_id": 87266615886,
+    "topic": "Administración de Propiedades - 17-9-2025",
+    "start_time": "2025-09-17T23:00:12Z",
+    "duration": 93,
+    "files": [
+      {
+        "type": "shared_screen_with_gallery_view",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "shared_screen_with_speaker_view",
+        "status": "downloaded"
+      },
+      {
+        "type": "gallery_view",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "shared_screen",
+        "status": "skipped_by_preference"
+      }
+    ],
+    "registered_at": "2025-09-18T07:47:12"
+  },
+  {
+    "meeting_id": 81968731332,
+    "topic": "Ética Profesional - 17-9-2025",
+    "start_time": "2025-09-17T20:51:22Z",
+    "duration": 34,
+    "files": [
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "chat_file",
+        "status": "skipped_by_preference"
+      }
+    ],
+    "registered_at": "2025-09-18T07:49:59"
+  },
+  {
+    "meeting_id": 86329162820,
+    "topic": "Modelos y Simulación - 17-9-2025",
+    "start_time": "2025-09-17T22:55:33Z",
+    "duration": 77,
+    "files": [
+      {
+        "type": "shared_screen_with_gallery_view",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "shared_screen",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "chat_file",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "shared_screen_with_speaker_view",
+        "status": "downloaded"
+      },
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "gallery_view",
+        "status": "skipped_by_preference"
+      }
+    ],
+    "registered_at": "2025-09-18T07:49:59"
+  },
+  {
+    "meeting_id": 87223035212,
+    "topic": "Planificación de Contenidos para Redes Sociales - 17-9-2025",
+    "start_time": "2025-09-17T20:56:35Z",
+    "duration": 51,
+    "files": [
+      {
+        "type": "shared_screen",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "shared_screen_with_speaker_view",
+        "status": "downloaded"
+      },
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      }
+    ],
+    "registered_at": "2025-09-18T07:51:25"
+  },
+  {
+    "meeting_id": 86599211471,
+    "topic": "Derecho Constitucional - 17-9-2025",
+    "start_time": "2025-09-17T17:34:37Z",
+    "duration": 45,
+    "files": [
+      {
+        "type": "shared_screen_with_speaker_view",
+        "status": "downloaded"
+      },
+      {
+        "type": "shared_screen",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      }
+    ],
+    "registered_at": "2025-09-18T07:52:50"
+  },
+  {
+    "meeting_id": 84347850199,
+    "topic": "Coordinación SIED",
+    "start_time": "2025-09-17T11:56:09Z",
+    "duration": 74,
+    "files": [
+      {
+        "type": "shared_screen_with_gallery_view",
+        "status": "downloaded"
+      }
+    ],
+    "registered_at": "2025-09-18T07:53:45"
+  },
+  {
+    "meeting_id": 86498124193,
+    "topic": "TRABAJO FINAL 17-9-2025",
+    "start_time": "2025-09-17T23:26:23Z",
+    "duration": 98,
+    "files": [
+      {
+        "type": "chat_file",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "gallery_view",
+        "status": "downloaded"
+      },
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      }
+    ],
+    "registered_at": "2025-09-18T07:55:34"
+  },
+  {
+    "meeting_id": 87179563152,
+    "topic": "Fundamentos de Fideicomisos, Loteos y Barrios Cerrados - 17-9-2025",
+    "start_time": "2025-09-17T20:53:56Z",
+    "duration": 91,
+    "files": [
+      {
+        "type": "chat_file",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "gallery_view",
+        "status": "downloaded"
+      },
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      }
+    ],
+    "registered_at": "2025-09-18T07:57:41"
+  },
+  {
+    "meeting_id": 89213552438,
+    "topic": "Certificación Corredor Inmobiliario Latinoamericano",
+    "start_time": "2025-09-18T20:57:47Z",
+    "duration": 108,
+    "files": [
+      {
+        "type": "shared_screen_with_gallery_view",
+        "status": "downloaded"
+      }
+    ],
+    "registered_at": "2025-09-19T08:05:17"
+  },
+  {
+    "meeting_id": 86174269330,
+    "topic": "Práctica Profesional Supervisada II - 18-9-2025",
+    "start_time": "2025-09-18T23:03:46Z",
+    "duration": 25,
+    "files": [
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      }
+    ],
+    "registered_at": "2025-09-19T08:08:17"
+  },
+  {
+    "meeting_id": 89006038414,
+    "topic": "Gestión del Capital Humano - 18-9-2025",
+    "start_time": "2025-09-18T20:48:13Z",
+    "duration": 79,
+    "files": [
+      {
+        "type": "gallery_view",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "shared_screen",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "shared_screen_with_gallery_view",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "shared_screen_with_speaker_view",
+        "status": "downloaded"
+      },
+      {
+        "type": "chat_file",
+        "status": "skipped_by_preference"
+      }
+    ],
+    "registered_at": "2025-09-19T08:08:17"
+  },
+  {
+    "meeting_id": 83247411949,
+    "topic": "Fundamentos de Ciberseguridad y Marcos Normativos - 18-9-2025",
+    "start_time": "2025-09-18T17:55:45Z",
+    "duration": 209,
+    "files": [
+      {
+        "type": "gallery_view",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "chat_file",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "shared_screen_with_gallery_view",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "shared_screen_with_speaker_view",
+        "status": "downloaded"
+      },
+      {
+        "type": "shared_screen",
+        "status": "skipped_by_preference"
+      }
+    ],
+    "registered_at": "2025-09-19T08:09:52"
+  },
+  {
+    "meeting_id": 88535918320,
+    "topic": "Política de Costos y Precios - 18-9-2025",
+    "start_time": "2025-09-18T20:54:11Z",
+    "duration": 85,
+    "files": [
+      {
+        "type": "active_speaker",
+        "status": "skipped_by_preference"
+      },
+      {
+        "type": "shared_screen_with_speaker_view",
+        "status": "downloaded"
+      },
+      {
+        "type": "shared_screen",
+        "status": "skipped_by_preference"
+      }
+    ],
+    "registered_at": "2025-09-19T08:16:26"
   }
 ]
