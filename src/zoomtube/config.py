@@ -42,6 +42,6 @@ SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
 
 # Directorio por defecto de descargas (puede ser override en CLI)
 def get_download_dir() -> Path:
-    return Path(os.getenv("RECORDINGS_BASE_PATH", Path.home() / "Downloads" / "zoom2yt"))
+    return Path(os.getenv("RECORDINGS_BASE_PATH", Path.home() / "Documents" / "zoomtube"))
 
 FFMPEG_BIN = os.getenv("FFMPEG_BIN", "ffmpeg")
