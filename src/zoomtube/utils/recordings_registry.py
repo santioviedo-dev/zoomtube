@@ -82,3 +82,17 @@ def update_file_status(meeting_id: str, file_type: str, status: str) -> None:
 def get_all_recordings() -> list[dict]:
     """Devuelve todas las reuniones registradas."""
     return _load()
+def get_file_status(meeting_id: str, file_type: str) -> str | None:
+    """
+    Devuelve el estado actual de un archivo en una reunión, o None si no existe.
+    """
+    records = _load()
+
+    for r in records:
+        if r["meeting_id"] == meeting_id:
+            for f in r["files"]:
+                if f["type"] == file_type:
+                    return f.get("status")
+    return None
+
+

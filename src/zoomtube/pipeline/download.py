@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Optional
 from zoomtube.utils.audio import has_sufficient_audio_activity
 from zoomtube.utils import downloads_registry, recordings_registry
+import zoomtube.constants as constants
 
 from zoomtube.clients import zoom_client
 from zoomtube.utils.logger import logger
@@ -39,13 +40,15 @@ def run(
     if date:
         start_date = end_date = date
     elif not start_date and not end_date:
-        default_date = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
-        start_date = end_date = default_date
+        date = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+        start_date = end_date = date
 
     # Carpeta destino
     target_dir = Path(output_path) if output_path else get_download_dir()
     if date:
         target_dir = target_dir / date
+    elif start_date and end_date:
+        target_dir = target_dir / f"{start_date}_to_{end_date}"
     target_dir.mkdir(parents=True, exist_ok=True)
 
     logger.info(f"Buscando grabaciones de {start_date} a {end_date}")
@@ -96,6 +99,8 @@ def run(
 
             if preferred_types:
                 # Buscar la primera que exista en orden de preferencia
+                if preferred_types == []:
+                    preferred_types = constants.ZOOM_RECORDING_TYPES
                 chosen = None
                 for pref in preferred_types:
                     chosen = next((f for f in files if f.get("recording_type") == pref), None)
@@ -126,7 +131,28 @@ def run(
                     recordings_registry.update_file_status(meeting_id, file_type, "failed")
                     continue
 
-                dest_path = get_unique_filename(target_dir, f"{topic}.mp4")
+                if recordings_registry.get_file_status(meeting_id, file_type) in ["downloaded", "success"]:
+                    logger.info(f"Ya descargado: {topic} ({file_type}), se omite.")
+                    continue
+                
+                
+                # comprobar si ya existe el archivo con esa ruta
+                
+                if preferred_types:
+                    file_path = target_dir / f"{topic}.mp4"
+                else:
+                    file_path = target_dir / f"{topic} [{file_type}].mp4" # Parece que no está entrando acá nunca
+                    # logger.debug(f"Comprobando existencia de archivo en {file_path}") 
+                    
+                
+                if file_path.exists():
+                    res = input(f"El archivo ya existe en la ruta: {file_path}, deseas descargarlo ahí de todas maneras?. (S/N): ")
+                    if res.strip().lower() != 's':
+                        logger.info(f"Se omite la descarga de {topic} ({file_type}) porque ya existe el archivo.")
+                        recordings_registry.update_file_status(meeting_id, file_type, "skipped_existing")
+                        continue
+                
+                dest_path = get_unique_filename(target_dir, f"{topic}{f" ({file_type})" if not preferred_types else ""}.mp4")
 
                 try:
                     logger.info(f"Descargando {topic} ({duration} min) [{file_type}] → {dest_path}")

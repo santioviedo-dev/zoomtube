@@ -24,7 +24,7 @@ def main():
     dl.add_argument("--output-path")
     dl.add_argument("--recording-type", nargs="+", choices=constants.ZOOM_RECORDING_TYPES,
                     help="Descargar todas las grabaciones que coincidan con los tipos")
-    dl.add_argument("--recording-type-preferred", nargs="+", choices=constants.ZOOM_RECORDING_TYPES,
+    dl.add_argument("--recording-type-preferred", nargs="*", choices=constants.ZOOM_RECORDING_TYPES,
                     help="Descargar solo la primera grabación encontrada según orden de preferencia")
     dl.add_argument("--check-audio", action="store_true",
                     help="Verificar que las grabaciones tengan audio suficiente", default=True)
