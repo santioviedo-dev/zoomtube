@@ -141,8 +141,7 @@ def run(
                 if preferred_types:
                     file_path = target_dir / f"{topic}.mp4"
                 else:
-                    file_path = target_dir / f"{topic} [{file_type}].mp4" # Parece que no está entrando acá nunca
-                    # logger.debug(f"Comprobando existencia de archivo en {file_path}") 
+                    file_path = target_dir / f"{topic} ({file_type}).mp4"
                     
                 
                 if file_path.exists():
