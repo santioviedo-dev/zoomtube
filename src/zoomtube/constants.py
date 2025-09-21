@@ -3,9 +3,6 @@ ZOOM_RECORDING_TYPES = [
     "shared_screen_with_gallery_view",
     "active_speaker",
     "gallery_view",
-    "audio_only",
-    "chat_file",
-    "timeline"
 ]
 
 DEFAULT_PREFERRED_TYPES = [
