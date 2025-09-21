@@ -34,3 +34,7 @@ package-dir = {"" = "src"}
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["zoomtube*"]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+
