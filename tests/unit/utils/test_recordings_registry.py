@@ -1,5 +1,4 @@
 # tests/utils/test_recordings_registry.py
-import json
 import pytest
 from pathlib import Path
 from zoomtube.utils import recordings_registry
