@@ -84,3 +84,40 @@ def download_recording(token: str, file_url: str, dest_path: Path) -> None:
             f.flush()
             os.fsync(f.fileno())
     logger.info(f"Grabación guardada en {dest_path}")
+
+
+class ZoomClient:
+    """Simple wrapper class providing instance methods around module functions.
+
+    This class is intentionally lightweight: it uses the existing module-level
+    functions to perform work so we don't duplicate logic. The tests only
+    require that a `ZoomClient` class exists and can be instantiated. Clients
+    that need more advanced behavior can keep using the free functions.
+    """
+
+    def __init__(self, account_id: Optional[str] = None, client_id: Optional[str] = None,
+                 client_secret: Optional[str] = None, token: Optional[str] = None):
+        self.account_id = account_id or config.ZOOM_ACCOUNT_ID
+        self.client_id = client_id or config.ZOOM_CLIENT_ID
+        self.client_secret = client_secret or config.ZOOM_CLIENT_SECRET
+        self._token = token
+
+    def get_access_token(self) -> str:
+        """Obtain and cache an access token for this client instance."""
+        if self._token:
+            return self._token
+        self._token = get_access_token(self.account_id, self.client_id, self.client_secret)
+        return self._token
+
+    def list_users(self) -> List[dict]:
+        token = self.get_access_token()
+        return list_users(token)
+
+    def list_recordings(self, user_id: str, start_date: str, end_date: Optional[str] = None,
+                        min_duration: Optional[int] = None, max_duration: Optional[int] = None) -> List[dict]:
+        token = self.get_access_token()
+        return list_recordings(token, user_id, start_date, end_date, min_duration, max_duration)
+
+    def download_recording(self, file_url: str, dest_path: Path) -> None:
+        token = self.get_access_token()
+        return download_recording(token, file_url, dest_path)
