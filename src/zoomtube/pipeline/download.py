@@ -135,9 +135,12 @@ def run(
                     recordings_registry.update_file_status(meeting_id, file_type, "failed")
                     continue
 
-                # Mantengo tu comportamiento actual: siempre guardás como "{topic}.mp4"
-                # (esto puede generar colisiones si bajás varias variantes por meeting)
-                dest_path = get_unique_filename(target_dir, f"{topic}.mp4")
+                # Nombre técnico para evitar colisiones
+                safe_type = (file_type or "unknown").lower()
+                dest_filename = f"{topic}__{safe_type}.mp4"
+
+                dest_path = get_unique_filename(target_dir, dest_filename)
+
 
                 try:
                     logger.info(
