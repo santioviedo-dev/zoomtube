@@ -51,9 +51,8 @@ def run(
     logger.info(f"Buscando grabaciones de {start_date} a {end_date}")
     logger.info(f"Destino: {target_dir}")
 
-    # Token y usuarios
-    token = zoom_client.get_access_token()
-    users = zoom_client.list_users(token)
+    # Usuarios (el cliente maneja token internamente)
+    users = zoom_client.list_users()
 
     for user in users:
         user_id = user.get("id")
@@ -63,7 +62,6 @@ def run(
         logger.debug(f"Consultando grabaciones de usuario {user_id}")
 
         meetings = zoom_client.list_recordings(
-            token=token,
             user_id=user_id,
             start_date=start_date,
             end_date=end_date,
@@ -96,66 +94,83 @@ def run(
 
             if preferred_types:
                 # Buscar la primera que exista en orden de preferencia
-                chosen = None
                 for pref in preferred_types:
-                    chosen = next((f for f in files if f.get("recording_type") == pref), None)
+                    chosen = next(
+                        (f for f in files if f.get("recording_type") == pref),
+                        None,
+                    )
                     if chosen:
                         files_to_process = [chosen]
                         break
                 # Las demás se marcan como omitidas
                 for f in files:
                     if f not in files_to_process:
-                        recordings_registry.update_file_status(meeting_id, f.get("recording_type"), "skipped_by_preference")
+                        recordings_registry.update_file_status(
+                            meeting_id,
+                            f.get("recording_type"),
+                            "skipped_by_preference",
+                        )
 
             elif recording_types:
-                # Incluir solo las que coinciden
-                files_to_process = [f for f in files if f.get("recording_type") in recording_types]
+                files_to_process = [
+                    f for f in files if f.get("recording_type") in recording_types
+                ]
                 for f in files:
                     if f not in files_to_process:
-                        recordings_registry.update_file_status(meeting_id, f.get("recording_type"), "skipped_by_preference")
+                        recordings_registry.update_file_status(
+                            meeting_id,
+                            f.get("recording_type"),
+                            "skipped_by_preference",
+                        )
             else:
-                # Si no se especifica, procesar todas
                 files_to_process = files
 
             # Descargar/analizar cada archivo elegido
             for file_info in files_to_process:
                 file_type = file_info.get("recording_type")
                 file_url = file_info.get("download_url")
+
                 if not file_url:
                     logger.warning(f"Grabación sin URL: {topic} ({file_type})")
                     recordings_registry.update_file_status(meeting_id, file_type, "failed")
                     continue
 
+                # Mantengo tu comportamiento actual: siempre guardás como "{topic}.mp4"
+                # (esto puede generar colisiones si bajás varias variantes por meeting)
                 dest_path = get_unique_filename(target_dir, f"{topic}.mp4")
 
                 try:
-                    logger.info(f"Descargando {topic} ({duration} min) [{file_type}] → {dest_path}")
-                    zoom_client.download_recording(token, file_url, dest_path)
+                    logger.info(
+                        f"Descargando {topic} ({duration} min) [{file_type}] → {dest_path}"
+                    )
 
-                    # Registrar inmediatamente como pendiente
+                    # OO: sin token externo
+                    zoom_client.download_recording(file_url, dest_path)
+
                     downloads_registry.register_download(
                         str(dest_path), topic, duration, "pending_audio_check"
                     )
                     recordings_registry.update_file_status(meeting_id, file_type, "downloaded")
 
-                    # Chequeo opcional de audio
                     if check_audio:
                         duration_secs = duration * 60
-                        if not has_sufficient_audio_activity(
+                        ok_audio = has_sufficient_audio_activity(
                             dest_path,
                             duration_secs,
                             silence_threshold_db=silence_threshold,
                             silence_ratio_threshold=silence_ratio,
-                        ):
+                        )
+                        if not ok_audio:
                             logger.warning(f"Descartada por silencio: {dest_path}")
                             downloads_registry.register_download(
                                 str(dest_path), topic, duration, "discarded_silence"
                             )
-                            recordings_registry.update_file_status(meeting_id, file_type, "discarded_audio")
+                            recordings_registry.update_file_status(
+                                meeting_id, file_type, "discarded_audio"
+                            )
                             dest_path.unlink(missing_ok=True)
                             continue
 
-                    # Si pasa audio o no se chequea → éxito
                     downloads_registry.register_download(
                         str(dest_path), topic, duration, "success"
                     )
