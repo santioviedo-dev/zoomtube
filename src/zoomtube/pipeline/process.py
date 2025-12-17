@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from pathlib import Path
+
 from zoomtube.pipeline import download, upload
 from zoomtube import config
 from zoomtube.utils.logger import logger
@@ -8,11 +9,16 @@ import zoomtube.constants as constants
 
 def run(date=None, check_audio=True):
     """
-    Descarga grabaciones de Zoom y las sube automáticamente a YouTube.
+    Ejecuta el pipeline completo:
+    - Descarga grabaciones de Zoom.
+    - Sube los videos a YouTube.
+
+    Convenciones:
     - Fecha por defecto: ayer.
-    - Tipos de grabación: shared_screen_with_speaker_view y speaker_view.
+    - Tipos de grabación preferidos: DEFAULT_PREFERRED_TYPES.
     - Privacidad en YouTube: unlisted.
-    - Título: mismo que el de la grabación (nombre de archivo).
+    - El título del video en YouTube se resuelve en upload.py
+      a partir del topic limpio (no del nombre técnico del archivo).
     """
     if not date:
         date = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
@@ -37,5 +43,5 @@ def run(date=None, check_audio=True):
         privacy_status="unlisted",
         tags=[],
         description="",
-        playlist_id=None,
+        # playlist_id=None,
     )

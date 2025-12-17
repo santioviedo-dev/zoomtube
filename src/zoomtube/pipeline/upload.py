@@ -15,8 +15,8 @@ def run_single(
     description: str = "",
     tags: Optional[List[str]] = None,
     privacy_status: str = "unlisted",
-    playlist_id: Optional[str] = None,
-    schedule: Optional[str] = None,
+    # playlist_id: Optional[str] = None,
+    # schedule: Optional[str] = None,
 ) -> Optional[str]:
     """
     Sube un solo video a YouTube y lo registra en uploads.json.
@@ -59,8 +59,8 @@ def run_batch(
     description: str = "",
     tags: Optional[List[str]] = None,
     privacy_status: str = "unlisted",
-    playlist_id: Optional[str] = None,
-    schedule: Optional[str] = None,
+    # playlist_id: Optional[str] = None,
+    # schedule: Optional[str] = None,
 ) -> List[str]:
     """
     Sube múltiples videos desde una carpeta.
@@ -95,8 +95,8 @@ def run_batch(
             description=description,
             tags=tags,
             privacy_status=privacy_status,
-            playlist_id=playlist_id,
-            schedule=schedule,
+            # playlist_id=playlist_id,
+            # schedule=schedule,
         )
 
         if video_id:

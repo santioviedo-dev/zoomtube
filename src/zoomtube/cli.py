@@ -26,8 +26,9 @@ def main():
                     help="Descargar todas las grabaciones que coincidan con los tipos")
     dl.add_argument("--recording-type-preferred", nargs="+", choices=constants.ZOOM_RECORDING_TYPES,
                     help="Descargar solo la primera grabación encontrada según orden de preferencia")
-    dl.add_argument("--check-audio", action="store_true",
-                    help="Verificar que las grabaciones tengan audio suficiente", default=True)
+    dl.add_argument("--check-audio", dest="check_audio", action="store_true")
+    dl.add_argument("--no-check-audio", dest="check_audio", action="store_false")
+    dl.set_defaults(check_audio=True)
     dl.add_argument("--silence-threshold", type=int,
                     default=constants.DEFAULT_SILENCE_THRESHOLD_DB,
                     help="Umbral de silencio en dB (default: -35)")
@@ -44,8 +45,8 @@ def main():
     single.add_argument("--description", default="")
     single.add_argument("--tags", nargs="+", default=[])
     single.add_argument("--privacy-status", choices=["public", "private", "unlisted"], default="unlisted")
-    single.add_argument("--playlist-id")
-    single.add_argument("--schedule")
+    # single.add_argument("--playlist-id") -> Agregado en upload.py pero no implementado aún
+    # single.add_argument("--schedule") -> Programar publicación del video | No implementado aún
 
     batch = upload_sub.add_parser("folder", help="Upload multiple videos from a folder")
     batch.add_argument("path", help="Path to folder")
@@ -72,6 +73,7 @@ def main():
     args = p.parse_args()
 
     # --- Configurar logger ---
+    # El resto del proyecto usa 'logger' importado desde zoomtube.utils.logger. Acá solo se configura.
     logger = get_logger(verbose=args.verbose, quiet=args.quiet)
 
     # --- Dispatch ---
@@ -103,8 +105,8 @@ def main():
                 description=args.description,
                 tags=args.tags,
                 privacy_status=args.privacy_status,
-                playlist_id=args.playlist_id,
-                schedule=args.schedule,
+                # playlist_id=args.playlist_id,
+                # schedule=args.schedule,
             )
         elif args.mode == "folder":
             logger.info(f"Subiendo carpeta: {args.path}")
@@ -113,7 +115,7 @@ def main():
                 description=args.description,
                 tags=args.tags,
                 privacy_status=args.privacy_status,
-                playlist_id=args.playlist_id,
+                # playlist_id=args.playlist_id,
                 # metadata_csv=args.metadata_csv,
             )
 
