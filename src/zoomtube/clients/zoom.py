@@ -5,6 +5,8 @@ import os
 from pathlib import Path
 from typing import Optional, List, Dict
 
+import json
+
 import requests
 
 from zoomtube.utils.logger import logger
@@ -65,7 +67,6 @@ def _list_recordings_core(
         if not files:
             continue
 
-        # Devolver todo
         m["recording_files"] = files
         filtered.append(m)
 

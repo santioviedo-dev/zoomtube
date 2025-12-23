@@ -58,7 +58,7 @@ def run(
         user_id = user.get("id")
         if not user_id:
             continue
-
+        
         logger.debug(f"Consultando grabaciones de usuario {user_id}")
 
         meetings = zoom_client.list_recordings(
