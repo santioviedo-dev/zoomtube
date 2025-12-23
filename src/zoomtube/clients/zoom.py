@@ -5,8 +5,6 @@ import os
 from pathlib import Path
 from typing import Optional, List, Dict
 
-import json
-
 import requests
 
 from zoomtube.utils.logger import logger
