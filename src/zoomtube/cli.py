@@ -59,8 +59,12 @@ def main():
     # --- process ---
     proc = sub.add_parser("process", help="Download and upload in one step")
     proc.add_argument("--date", help="Date to process (YYYY-MM-DD). Default: yesterday")
-    proc.add_argument("--check-audio", action="store_true", default=True,
-                      help="Verificar que las grabaciones tengan audio suficiente")
+    proc.add_argument(
+        "--no-check-audio",
+        action="store_false",
+        dest="check_audio",
+        help="No verificar audio de las grabaciones"
+    )
 
     # --- list ---
     list_parser = sub.add_parser("list", help="List registry data (uploads, downloads, recordings)")
