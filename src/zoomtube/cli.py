@@ -1,8 +1,9 @@
 from argparse import ArgumentParser
 from zoomtube.pipeline import download, upload, process
 import zoomtube.constants as constants
+from zoomtube.registries import recordings, uploads
 from zoomtube.utils.logger import get_logger
-from zoomtube.utils import uploads_registry, downloads_registry, recordings_registry  # <-- agregado
+from zoomtube.registries import downloads  # <-- agregado
 
 
 def main():
@@ -129,7 +130,7 @@ def main():
 
     elif args.cmd == "list":
         if args.list_mode == "uploads":
-            uploads = uploads_registry.get_all_uploads()
+            uploads = uploads.get_all_uploads()
             if not uploads:
                 print("No hay registros de subidas aún.")
                 return
@@ -137,7 +138,7 @@ def main():
             for u in uploads:
                 print(f"- {u['uploaded_at']} | {u['status']} | {u['title']} ({u['local_path']}) → {u.get('youtube_id')}")
         elif args.list_mode == "downloads":
-            downloads = downloads_registry.get_all_downloads()
+            downloads = downloads.get_all_downloads()
             if not downloads:
                 print("No hay registros de descargas aún.")
                 return
@@ -146,7 +147,7 @@ def main():
                 print(f"- {d['downloaded_at']} | {d['status']} | {d['topic']} "
                       f"({d['duration']} min) → {d['local_path']}")
         elif args.list_mode == "recordings":
-            recordings = recordings_registry.get_all_recordings()
+            recordings = recordings.get_all_recordings()
             if not recordings:
                 print("No hay registros de grabaciones aún.")
                 return

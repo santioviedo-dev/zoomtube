@@ -1,8 +1,9 @@
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Optional
+from zoomtube.registries import recordings
 from zoomtube.utils.audio import has_sufficient_audio_activity
-from zoomtube.utils import downloads_registry, recordings_registry
+from zoomtube.registries import downloads
 
 from zoomtube.clients import zoom_client
 from zoomtube.utils.logger import logger
@@ -81,7 +82,7 @@ def run(
                 continue
 
             # Registrar todas como disponibles
-            recordings_registry.register_meeting(
+            recordings.register_meeting(
                 meeting_id=meeting_id,
                 topic=topic,
                 start_time=start_time,
@@ -105,7 +106,7 @@ def run(
                 # Las demás se marcan como omitidas
                 for f in files:
                     if f not in files_to_process:
-                        recordings_registry.update_file_status(
+                        recordings.update_file_status(
                             meeting_id,
                             f.get("recording_type"),
                             "skipped_by_preference",
@@ -117,7 +118,7 @@ def run(
                 ]
                 for f in files:
                     if f not in files_to_process:
-                        recordings_registry.update_file_status(
+                        recordings.update_file_status(
                             meeting_id,
                             f.get("recording_type"),
                             "skipped_by_preference",
@@ -132,7 +133,7 @@ def run(
 
                 if not file_url:
                     logger.warning(f"Grabación sin URL: {topic} ({file_type})")
-                    recordings_registry.update_file_status(meeting_id, file_type, "failed")
+                    recordings.update_file_status(meeting_id, file_type, "failed")
                     continue
 
                 # Nombre técnico para evitar colisiones
@@ -150,10 +151,10 @@ def run(
                     # OO: sin token externo
                     zoom_client.download_recording(file_url, dest_path)
 
-                    downloads_registry.register_download(
+                    downloads.register_download(
                         str(dest_path), topic, duration, "pending_audio_check"
                     )
-                    recordings_registry.update_file_status(meeting_id, file_type, "downloaded")
+                    recordings.update_file_status(meeting_id, file_type, "downloaded")
 
                     if check_audio:
                         duration_secs = duration * 60
@@ -165,22 +166,22 @@ def run(
                         )
                         if not ok_audio:
                             logger.warning(f"Descartada por silencio: {dest_path}")
-                            downloads_registry.register_download(
+                            downloads.register_download(
                                 str(dest_path), topic, duration, "discarded_silence"
                             )
-                            recordings_registry.update_file_status(
+                            recordings.update_file_status(
                                 meeting_id, file_type, "discarded_audio"
                             )
                             dest_path.unlink(missing_ok=True)
                             continue
 
-                    downloads_registry.register_download(
+                    downloads.register_download(
                         str(dest_path), topic, duration, "success"
                     )
 
                 except Exception as e:
                     logger.error(f"Error descargando {topic}: {e}")
-                    downloads_registry.register_download(
+                    downloads.register_download(
                         str(dest_path), topic, duration, "failed"
                     )
-                    recordings_registry.update_file_status(meeting_id, file_type, "failed")
+                    recordings.update_file_status(meeting_id, file_type, "failed")

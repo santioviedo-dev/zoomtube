@@ -6,7 +6,7 @@ from zoomtube.clients import youtube_client
 from zoomtube.utils.logger import logger
 from zoomtube.constants import VIDEO_EXTENSIONS
 from zoomtube.utils.recordings import sanitize_filename
-from zoomtube.utils import uploads_registry
+from zoomtube.registries import uploads
 
 
 def run_single(
@@ -27,10 +27,10 @@ def run_single(
 
     if not file_path.exists() or not file_path.is_file():
         logger.error(f"Archivo inválido: {file_path}")
-        uploads_registry.register_upload(str(file_path), None, clean_title, "failed")
+        uploads.register_upload(str(file_path), None, clean_title, "failed")
         return None
 
-    if uploads_registry.is_uploaded(str(file_path)):
+    if uploads.is_uploaded(str(file_path)):
         logger.info(f"Ya estaba subido: {file_path}")
         return None
 
@@ -44,13 +44,13 @@ def run_single(
             # Nota: ver implementación de playlist_id y schedule
         )
 
-        uploads_registry.register_upload(str(file_path), video_id, clean_title, "success")
+        uploads.register_upload(str(file_path), video_id, clean_title, "success")
         logger.info(f"✅ Subida completada: {video_id}")
         return video_id
 
     except Exception as e:
         logger.error(f"❌ Error subiendo {file_path}: {e}")
-        uploads_registry.register_upload(str(file_path), None, clean_title, "failed")
+        uploads.register_upload(str(file_path), None, clean_title, "failed")
         return None
 
 
@@ -85,7 +85,7 @@ def run_batch(
         stem = stem.split("__", 1)[0]
         title = sanitize_filename(stem)
 
-        if uploads_registry.is_uploaded(str(file_path)):
+        if uploads.is_uploaded(str(file_path)):
             logger.info(f"Ya estaba subido (omitido): {file_path}")
             continue
 
