@@ -70,3 +70,21 @@ def get_all_uploads() -> list[dict]:
     Devuelve todos los registros (puede usarse para reportes).
     """
     return _load()
+
+# Posible clase para encapsular esta funcionalidad, aunque por ahora no es estrictamente necesaria. 
+# class UploadRegistry:
+#     """
+#     Clase para manejar el registro de subidas.
+#     """
+
+#     @staticmethod
+#     def is_uploaded(local_path: str) -> bool:
+#         return is_uploaded(local_path)
+
+#     @staticmethod
+#     def register_upload(local_path: str, youtube_id: str, title: str, status: str) -> None:
+#         register_upload(local_path, youtube_id, title, status)
+
+#     @staticmethod
+#     def get_all_uploads() -> list[dict]:
+#         return get_all_uploads()
