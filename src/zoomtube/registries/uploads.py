@@ -29,7 +29,7 @@ def _save(data: list[dict]) -> None:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 
-def is_uploaded(local_path: str) -> bool:
+def _is_uploaded(local_path: str) -> bool:
     """
     Verifica si un archivo ya fue subido con éxito.
     """
@@ -40,7 +40,7 @@ def is_uploaded(local_path: str) -> bool:
     return False
 
 
-def register_upload(local_path: str, youtube_id: str, title: str, status: str) -> None:
+def _register_upload(local_path: str, youtube_id: str, title: str, status: str) -> None:
     """
     Registra una subida (exitosa o fallida).
 
@@ -65,26 +65,57 @@ def register_upload(local_path: str, youtube_id: str, title: str, status: str) -
     logger.info(f"Registro actualizado: {local_path} → {status}")
 
 
-def get_all_uploads() -> list[dict]:
+def _get_all_uploads() -> list[dict]:
     """
     Devuelve todos los registros (puede usarse para reportes).
     """
     return _load()
 
 # Posible clase para encapsular esta funcionalidad, aunque por ahora no es estrictamente necesaria. 
-# class UploadRegistry:
-#     """
-#     Clase para manejar el registro de subidas.
-#     """
+class UploadRegistry():
+    """
+    Clase para manejar el registro de subidas.
+    """
 
-#     @staticmethod
-#     def is_uploaded(local_path: str) -> bool:
-#         return is_uploaded(local_path)
+    @staticmethod
+    def is_uploaded(local_path: str) -> bool:
+        """
+        Verifica si un archivo ya fue subido con éxito.
+        """
+        records = _load()
+        for r in records:
+            if r["local_path"] == local_path and r["status"] == "success":
+                return True
+        return False
 
-#     @staticmethod
-#     def register_upload(local_path: str, youtube_id: str, title: str, status: str) -> None:
-#         register_upload(local_path, youtube_id, title, status)
+    @staticmethod
+    def register_upload(local_path: str, youtube_id: str, title: str, status: str) -> None:
+        """
+        Registra una subida (exitosa o fallida).
 
-#     @staticmethod
-#     def get_all_uploads() -> list[dict]:
-#         return get_all_uploads()
+        Args:
+            local_path: ruta al archivo de video en disco.
+            youtube_id: ID del video en YouTube (None si falló).
+            title: título usado en la subida.
+            status: "success" o "failed".
+        """
+        records = _load()
+
+        entry = {
+            "local_path": local_path,
+            "youtube_id": youtube_id,
+            "title": title,
+            "uploaded_at": datetime.now().isoformat(timespec="seconds"),
+            "status": status,
+        }
+        records.append(entry)
+        _save(records)
+
+        logger.info(f"Registro actualizado: {local_path} → {status}")
+
+    @staticmethod
+    def get_all_uploads() -> list[dict]:
+        """
+        Devuelve todos los registros (puede usarse para reportes).
+        """
+        return _load()

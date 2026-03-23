@@ -1,9 +1,9 @@
-from .uploads import Uploads
-from .downloads import Downloads
-from .recordings import Recordings
+from .uploads import UploadRegistry
+from .downloads import DownloadRegistry
+from .recordings import RecordingRegistry
 
-uploads = Uploads()
-downloads = Downloads()
-recordings = Recordings()
+uploads = UploadRegistry()
+downloads = DownloadRegistry()
+recordings = RecordingRegistry()
 
 __all__ = ["uploads", "downloads", "recordings", "Uploads", "Downloads", "Recordings"]
