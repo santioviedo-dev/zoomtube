@@ -53,7 +53,7 @@ def _load_credentials_core(
 
 
 # =========================
-# API pública (OO)
+# API pública
 # =========================
 
 class YoutubeClient:

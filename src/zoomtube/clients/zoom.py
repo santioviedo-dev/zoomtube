@@ -90,14 +90,14 @@ def _download_recording_core(
 
 
 # =========================
-# API pública (OO)
+# API pública
 # =========================
 
 class ZoomClient:
     """
-    Cliente oficial de Zoom para el proyecto.
+    Cliente de Zoom para el proyecto.
     - Encapsula credenciales (config)
-    - Maneja/cacha token
+    - Maneja/cachea token
     - Reusa conexiones con requests.Session()
     - Expone métodos sin "token plumbing"
     """

@@ -13,7 +13,7 @@ Este proyecto automatiza la descarga de grabaciones de Zoom y su posterior subid
 
 1. Clona el repositorio:
 ```bash
-git clone [URL_DEL_REPOSITORIO]
+git clone https://github.com/santioviedo-dev/zoomtube
 cd zoom-to-youtube
 ```
 
