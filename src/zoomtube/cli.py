@@ -1,8 +1,9 @@
 from argparse import ArgumentParser
 from zoomtube.pipeline import download, upload, process
 import zoomtube.constants as constants
+from zoomtube.registries import recordings, uploads
 from zoomtube.utils.logger import get_logger
-from zoomtube.utils import uploads_registry, downloads_registry, recordings_registry  # <-- agregado
+from zoomtube.registries import downloads  # <-- agregado
 
 
 def main():
@@ -26,8 +27,9 @@ def main():
                     help="Descargar todas las grabaciones que coincidan con los tipos")
     dl.add_argument("--recording-type-preferred", nargs="+", choices=constants.ZOOM_RECORDING_TYPES,
                     help="Descargar solo la primera grabación encontrada según orden de preferencia")
-    dl.add_argument("--check-audio", action="store_true",
-                    help="Verificar que las grabaciones tengan audio suficiente", default=True)
+    dl.add_argument("--check-audio", dest="check_audio", action="store_true")
+    dl.add_argument("--no-check-audio", dest="check_audio", action="store_false")
+    dl.set_defaults(check_audio=True)
     dl.add_argument("--silence-threshold", type=int,
                     default=constants.DEFAULT_SILENCE_THRESHOLD_DB,
                     help="Umbral de silencio en dB (default: -35)")
@@ -44,8 +46,8 @@ def main():
     single.add_argument("--description", default="")
     single.add_argument("--tags", nargs="+", default=[])
     single.add_argument("--privacy-status", choices=["public", "private", "unlisted"], default="unlisted")
-    single.add_argument("--playlist-id")
-    single.add_argument("--schedule")
+    # single.add_argument("--playlist-id") -> Agregado en upload.py pero no implementado aún
+    # single.add_argument("--schedule") -> Programar publicación del video | No implementado aún
 
     batch = upload_sub.add_parser("folder", help="Upload multiple videos from a folder")
     batch.add_argument("path", help="Path to folder")
@@ -58,8 +60,12 @@ def main():
     # --- process ---
     proc = sub.add_parser("process", help="Download and upload in one step")
     proc.add_argument("--date", help="Date to process (YYYY-MM-DD). Default: yesterday")
-    proc.add_argument("--check-audio", action="store_true", default=True,
-                      help="Verificar que las grabaciones tengan audio suficiente")
+    proc.add_argument(
+        "--no-check-audio",
+        action="store_false",
+        dest="check_audio",
+        help="No verificar audio de las grabaciones"
+    )
 
     # --- list ---
     list_parser = sub.add_parser("list", help="List registry data (uploads, downloads, recordings)")
@@ -72,6 +78,7 @@ def main():
     args = p.parse_args()
 
     # --- Configurar logger ---
+    # El resto del proyecto usa 'logger' importado desde zoomtube.utils.logger. Acá solo se configura.
     logger = get_logger(verbose=args.verbose, quiet=args.quiet)
 
     # --- Dispatch ---
@@ -103,8 +110,8 @@ def main():
                 description=args.description,
                 tags=args.tags,
                 privacy_status=args.privacy_status,
-                playlist_id=args.playlist_id,
-                schedule=args.schedule,
+                # playlist_id=args.playlist_id,
+                # schedule=args.schedule,
             )
         elif args.mode == "folder":
             logger.info(f"Subiendo carpeta: {args.path}")
@@ -113,7 +120,7 @@ def main():
                 description=args.description,
                 tags=args.tags,
                 privacy_status=args.privacy_status,
-                playlist_id=args.playlist_id,
+                # playlist_id=args.playlist_id,
                 # metadata_csv=args.metadata_csv,
             )
 
@@ -123,7 +130,7 @@ def main():
 
     elif args.cmd == "list":
         if args.list_mode == "uploads":
-            uploads = uploads_registry.get_all_uploads()
+            uploads = uploads.get_all_uploads()
             if not uploads:
                 print("No hay registros de subidas aún.")
                 return
@@ -131,7 +138,7 @@ def main():
             for u in uploads:
                 print(f"- {u['uploaded_at']} | {u['status']} | {u['title']} ({u['local_path']}) → {u.get('youtube_id')}")
         elif args.list_mode == "downloads":
-            downloads = downloads_registry.get_all_downloads()
+            downloads = downloads.get_all_downloads()
             if not downloads:
                 print("No hay registros de descargas aún.")
                 return
@@ -140,7 +147,7 @@ def main():
                 print(f"- {d['downloaded_at']} | {d['status']} | {d['topic']} "
                       f"({d['duration']} min) → {d['local_path']}")
         elif args.list_mode == "recordings":
-            recordings = recordings_registry.get_all_recordings()
+            recordings = recordings.get_all_recordings()
             if not recordings:
                 print("No hay registros de grabaciones aún.")
                 return

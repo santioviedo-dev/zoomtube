@@ -29,7 +29,7 @@ def _save(data: list[dict]) -> None:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 
-def register_meeting(meeting_id: str, topic: str, start_time: str, duration: int, files: list[dict]) -> None:
+def _register_meeting(meeting_id: str, topic: str, start_time: str, duration: int, files: list[dict]) -> None:
     """
     Registra una reunión con todos sus archivos listados desde Zoom.
 
@@ -61,7 +61,7 @@ def register_meeting(meeting_id: str, topic: str, start_time: str, duration: int
     logger.debug(f"Reunión registrada en recordings.json: {topic} ({meeting_id})")
 
 
-def update_file_status(meeting_id: str, file_type: str, status: str) -> None:
+def _update_file_status(meeting_id: str, file_type: str, status: str) -> None:
     """
     Actualiza el estado de un archivo dentro de una reunión.
     Ej: status = "downloaded", "discarded_audio", "skipped_by_preference"
@@ -79,6 +79,36 @@ def update_file_status(meeting_id: str, file_type: str, status: str) -> None:
     logger.debug(f"Estado actualizado: meeting {meeting_id}, file {file_type} → {status}")
 
 
-def get_all_recordings() -> list[dict]:
+def _get_all_recordings() -> list[dict]:
     """Devuelve todas las reuniones registradas."""
     return _load()
+
+class RecordingRegistry():
+
+    @staticmethod
+    def get_all_recordings() -> list[dict]:
+        """Devuelve todas las reuniones registradas."""
+        return _load()
+    
+    @staticmethod
+    def update_file_status(meeting_id: str, file_type: str, status: str) -> None:
+        """
+        Actualiza el estado de un archivo dentro de una reunión.
+        Ej: status = "downloaded", "discarded_audio", "skipped_by_preference"
+        """
+        _update_file_status(meeting_id, file_type, status)
+    
+    @staticmethod
+    def register_meeting(meeting_id: str, topic: str, start_time: str, duration: int, files: list[dict]) -> None:
+        """
+        Registra una reunión con todos sus archivos listados desde Zoom.
+
+        Args:
+            meeting_id: ID de la reunión en Zoom.
+            topic: título de la reunión.
+            start_time: fecha/hora de inicio (string ISO).
+            duration: duración en minutos.
+            files: lista de dicts con { "type": str, "status": str }
+                status inicial puede ser "available"
+        """     
+        _register_meeting(meeting_id, topic, start_time, duration, files)           

@@ -29,7 +29,7 @@ def _save(data: list[dict]) -> None:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 
-def register_download(local_path: str, topic: str, duration: int, status: str) -> None:
+def _register_download(local_path: str, topic: str, duration: int, status: str) -> None:
     """
     Registra o actualiza una descarga de grabación.
 
@@ -68,8 +68,23 @@ def register_download(local_path: str, topic: str, duration: int, status: str) -
     logger.info(f"Registro de descarga {action}: {local_path} → {status}")
 
 
-def get_all_downloads() -> list[dict]:
+def _get_all_downloads() -> list[dict]:
     """
     Devuelve todos los registros (puede usarse para reportes).
     """
     return _load()
+
+class DownloadRegistry():
+    
+    
+    @staticmethod
+    def get_all_downloads() -> list[dict]:
+        """
+        Devuelve todos los registros (puede usarse para reportes).
+        """
+        return _load()
+    
+    @staticmethod
+    def register_download(local_path: str, topic: str, duration: int, status: str) -> None:
+        _register_download(local_path, topic, duration, status)
+    
