@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Optional
 from zoomtube.registries import recordings
-from zoomtube.utils.audio import has_sufficient_audio_activity
+from zoomtube.utils.audio import AudioAnalyzer
 from zoomtube.registries import downloads
 
 from zoomtube.clients import zoom_client
@@ -55,6 +55,12 @@ def run(
     # Usuarios (el cliente maneja token internamente)
     users = zoom_client.list_users()
 
+
+    audio_analyzer = AudioAnalyzer(
+        silence_threshold_db=silence_threshold,
+        silence_ratio_threshold=silence_ratio,
+    )
+    
     for user in users:
         user_id = user.get("id")
         if not user_id:
@@ -158,11 +164,9 @@ def run(
 
                     if check_audio:
                         duration_secs = duration * 60
-                        ok_audio = has_sufficient_audio_activity(
+                        ok_audio = audio_analyzer.has_audio(
                             dest_path,
                             duration_secs,
-                            silence_threshold_db=silence_threshold,
-                            silence_ratio_threshold=silence_ratio,
                         )
                         if not ok_audio:
                             logger.warning(f"Descartada por silencio: {dest_path}")
